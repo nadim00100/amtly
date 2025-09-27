@@ -1,0 +1,1997 @@
+{
+  "form_name": "Unfallfragebogen zum Antrag auf Leistungen nach dem Dritten Buch Sozialgesetzbuch – SGB III",
+  "description": "Fragebogen zur Erfassung von Schadensereignissen gemäß § 116 des Zehnten Buches Sozialgesetzbuch - SGB X",
+  "sections": {
+    "A": {
+      "title": "Angaben zur Person",
+      "fields": [
+        {
+          "field_number": 1,
+          "field_id": "UF-01",
+          "label": "Vorname",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihren Vornamen ein",
+          "examples": "Maria",
+          "validation": {
+            "pattern": "^[a-zA-ZäöüÄÖÜß\\s-]+$",
+            "hint": "Nur Buchstaben, Leerzeichen und Bindestriche erlaubt"
+          },
+          "context": "Ihr Vorname für die Identifikation",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 2,
+          "field_id": "UF-02",
+          "label": "Nachname",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihren Nachnamen ein",
+          "examples": "Müller",
+          "validation": {
+            "pattern": "^[a-zA-ZäöüÄÖÜß\\s-]+$",
+            "hint": "Nur Buchstaben, Leerzeichen und Bindestriche erlaubt"
+          },
+          "context": "Ihr Nachname für die Identifikation",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 3,
+          "field_id": "UF-03",
+          "label": "Kundennummer",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihre Kundennummer bei der Bundesagentur für Arbeit ein",
+          "examples": "12345678",
+          "validation": {
+            "pattern": "^[0-9]{8}$",
+            "hint": "8-stellige Kundennummer"
+          },
+          "context": "Ihre eindeutige Kundennummer bei der BA",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 4,
+          "field_id": "UF-04",
+          "label": "Geburtsdatum (TT.MM.JJJJ)",
+          "type": "date",
+          "required": true,
+          "helper": "Geben Sie Ihr Geburtsdatum im Format TT.MM.JJJJ ein",
+          "examples": "15.03.1985",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Ihr Geburtsdatum für die eindeutige Zuordnung",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 5,
+          "field_id": "UF-05",
+          "label": "Straße",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihre Straße ein",
+          "examples": "Musterstraße",
+          "context": "Ihre Anschrift",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 6,
+          "field_id": "UF-06",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihre Hausnummer ein",
+          "examples": "42a",
+          "validation": {
+            "pattern": "^[0-9]+[a-zA-Z]?$",
+            "hint": "Zahlen und optional ein Buchstabe"
+          },
+          "context": "Ihre Hausnummer",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 7,
+          "field_id": "UF-07",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihre fünfstellige Postleitzahl ein",
+          "examples": "10115",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "Genau 5 Ziffern"
+          },
+          "context": "Ihre Postleitzahl",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 8,
+          "field_id": "UF-08",
+          "label": "Wohnort",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihren Wohnort ein",
+          "examples": "Berlin",
+          "context": "Ihr Wohnort",
+          "ui_hint": "input_medium"
+        }
+      ]
+    },
+    "B": {
+      "title": "Angaben zum Schadensereignis",
+      "fields": [
+        {
+          "field_number": 9,
+          "field_id": "UF-09",
+          "label": "Tag des Unfalls oder Schadensereignisses (TT.MM.JJJJ)",
+          "type": "date",
+          "required": true,
+          "helper": "Geben Sie das Datum des Unfalls oder Schadensereignisses ein",
+          "examples": "15.06.2023",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Datum des Schadensereignisses",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 10,
+          "field_id": "UF-10",
+          "label": "Ort des Unfalls oder des Schadensereignisses",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie den Ort des Unfalls oder Schadensereignisses an",
+          "examples": "Musterstraße 1, 10115 Berlin",
+          "context": "Genauer Ort des Schadensereignisses",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 11,
+          "field_id": "UF-11",
+          "label": "Es handelt sich um:",
+          "type": "radio",
+          "required": true,
+          "helper": "Wählen Sie die Art des Schadensereignisses aus",
+          "options": [
+            {
+              "value": "arbeitsunfall",
+              "label": "einen Arbeits- oder Wegeunfall - siehe auch E."
+            },
+            {
+              "value": "verkehrsunfall",
+              "label": "einen Verkehrsunfall - siehe auch Frage F."
+            },
+            {
+              "value": "sonstiges",
+              "label": "ein sonstiges Schadensereignis - siehe auch Frage G."
+            }
+          ],
+          "dependencies": {
+            "on_arbeitsunfall": {
+              "section_additional": "E",
+              "follow_up": "Bitte füllen Sie zusätzlich Abschnitt E aus"
+            },
+            "on_verkehrsunfall": {
+              "section_additional": "F",
+              "follow_up": "Bitte füllen Sie zusätzlich Abschnitt F aus"
+            },
+            "on_sonstiges": {
+              "section_additional": "G",
+              "follow_up": "Bitte füllen Sie zusätzlich Abschnitt G aus"
+            }
+          },
+          "context": "Art des Schadensereignisses bestimmt weitere erforderliche Angaben",
+          "ui_hint": "radio_vertical"
+        },
+        {
+          "field_number": 12,
+          "field_id": "UF-12",
+          "label": "Schildern Sie bitte möglichst ausführlich den Unfall oder die Entstehung des Schadens",
+          "type": "textarea",
+          "required": true,
+          "helper": "Beschreiben Sie detailliert den Hergang des Unfalls oder Schadensereignisses - gegebenenfalls Anlage beifügen",
+          "examples": "Am 15.06.2023 bin ich auf dem Weg zur Arbeit an der Kreuzung Musterstraße/Beispielweg gestürzt, weil...",
+          "context": "Detaillierte Schilderung für die Schadensbeurteilung",
+          "ui_hint": "textarea_large"
+        },
+        {
+          "field_number": 13,
+          "field_id": "UF-13",
+          "label": "Welche Verletzungen haben Sie erlitten?",
+          "type": "textarea",
+          "required": true,
+          "helper": "Beschreiben Sie Ihre Verletzungen detailliert",
+          "examples": "Bruch des linken Arms, Prellungen am Rücken, Schürfwunden an beiden Knien",
+          "context": "Art und Umfang der Verletzungen für die Leistungsbeurteilung",
+          "ui_hint": "textarea_medium"
+        },
+        {
+          "field_number": 14,
+          "field_id": "UF-14",
+          "label": "Vorname des Verursachers",
+          "type": "text",
+          "required": false,
+          "helper": "Geben Sie den Vornamen des Unfallverursachers an, falls bekannt",
+          "examples": "Max",
+          "context": "Identifikation des Schadensverursachers",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 15,
+          "field_id": "UF-15",
+          "label": "Nachname des Verursachers",
+          "type": "text",
+          "required": false,
+          "helper": "Geben Sie den Nachnamen des Unfallverursachers an, falls bekannt",
+          "examples": "Mustermann",
+          "context": "Identifikation des Schadensverursachers",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 16,
+          "field_id": "UF-16",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße des Unfallverursachers",
+          "examples": "Beispielweg",
+          "context": "Anschrift des Schadensverursachers",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 17,
+          "field_id": "UF-17",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer des Unfallverursachers",
+          "examples": "15",
+          "context": "Anschrift des Schadensverursachers",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 18,
+          "field_id": "UF-18",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl des Unfallverursachers",
+          "examples": "12345",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift des Schadensverursachers",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 19,
+          "field_id": "UF-19",
+          "label": "Wohnort",
+          "type": "text",
+          "required": false,
+          "helper": "Wohnort des Unfallverursachers",
+          "examples": "Musterstadt",
+          "context": "Anschrift des Schadensverursachers",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 20,
+          "field_id": "UF-20",
+          "label": "Lebte einer der Verursacher oder Schädiger mit Ihnen in häuslicher Gemeinschaft?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob der Verursacher mit Ihnen zusammenlebt",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["UF-21", "UF-22"],
+              "follow_up": "Bitte beantworten Sie die Fragen 21 und 22"
+            },
+            "on_nein": {
+              "section_jump": "UF-23",
+              "follow_up": "Weiter mit Frage 23"
+            }
+          },
+          "context": "Häusliche Gemeinschaft kann Regressansprüche beeinflussen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 21,
+          "field_id": "UF-21",
+          "label": "Wenn ja: Seit wann leben Sie in häuslicher Gemeinschaft? (TT.MM.JJJJ)",
+          "type": "date",
+          "required": false,
+          "helper": "Geben Sie den Beginn der häuslichen Gemeinschaft an",
+          "examples": "01.01.2020",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Dauer der häuslichen Gemeinschaft",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 22,
+          "field_id": "UF-22",
+          "label": "Wie ist der Verwandtschaftsgrad mit dem Verursacher?",
+          "type": "text",
+          "required": false,
+          "helper": "Beschreiben Sie das Verwandtschaftsverhältnis",
+          "examples": "Ehepartner, Kind, Geschwister",
+          "context": "Verwandtschaftsgrad beeinflusst Regressansprüche",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 23,
+          "field_id": "UF-23",
+          "label": "Name der Haftpflichtversicherung",
+          "type": "text",
+          "required": false,
+          "helper": "Geben Sie die Haftpflichtversicherung des Verursachers oder Schädigers an",
+          "examples": "Muster Versicherung AG",
+          "context": "Haftpflichtversicherung für Schadensregulierung",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 24,
+          "field_id": "UF-24",
+          "label": "Schadennummer",
+          "type": "text",
+          "required": false,
+          "helper": "Schadennummer bei der Haftpflichtversicherung",
+          "examples": "SCH-2023-123456",
+          "context": "Eindeutige Zuordnung des Schadensfalls",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 25,
+          "field_id": "UF-25",
+          "label": "Haben Sie bereits Ansprüche auf Schadensersatz erhoben oder beabsichtigen Sie, derartige Ansprüche anzumelden?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie Schadensersatzansprüche geltend gemacht haben",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["UF-26", "UF-27"],
+              "follow_up": "Bitte geben Sie Details zu den Schadensersatzansprüchen an"
+            },
+            "on_nein": {
+              "section_jump": "C",
+              "follow_up": "Weiter bei Abschnitt C"
+            }
+          },
+          "context": "Status der Schadensersatzansprüche",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 26,
+          "field_id": "UF-26",
+          "label": "Ergebnis",
+          "type": "radio",
+          "required": false,
+          "helper": "Wählen Sie das Ergebnis Ihrer Schadensersatzansprüche",
+          "options": [
+            {
+              "value": "nicht_abgeschlossen",
+              "label": "Verhandlungen sind noch nicht abgeschlossen"
+            },
+            {
+              "value": "anerkennung",
+              "label": "Anerkennung durch den Versicherer - bitte Unterlagen beifügen"
+            },
+            {
+              "value": "vergleich",
+              "label": "Es wurde ein Vergleich geschlossen"
+            },
+            {
+              "value": "urteil",
+              "label": "Klage wurde durch Urteil beendet - bitte Unterlagen beifügen"
+            },
+            {
+              "value": "klageverfahren",
+              "label": "Klageverfahren ist noch anhängig"
+            }
+          ],
+          "dependencies": {
+            "on_vergleich": {
+              "fields": ["UF-27"],
+              "follow_up": "Bitte geben Sie das Datum des Vergleichs an"
+            },
+            "on_klageverfahren": {
+              "fields": ["UF-28", "UF-29"],
+              "follow_up": "Bitte geben Sie Gerichtsname und Aktenzeichen an"
+            }
+          },
+          "context": "Status und Ergebnis der Schadensersatzverhandlungen",
+          "ui_hint": "radio_vertical"
+        },
+        {
+          "field_number": 27,
+          "field_id": "UF-27",
+          "label": "Datum (TT.MM.JJJJ)",
+          "type": "date",
+          "required": false,
+          "helper": "Datum des Vergleichs oder Urteils",
+          "examples": "15.08.2023",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Datum des rechtlichen Abschlusses",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 28,
+          "field_id": "UF-28",
+          "label": "Name des Gerichts",
+          "type": "text",
+          "required": false,
+          "helper": "Name des zuständigen Gerichts bei anhängigem Klageverfahren",
+          "examples": "Amtsgericht Berlin",
+          "context": "Zuständiges Gericht für laufendes Verfahren",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 29,
+          "field_id": "UF-29",
+          "label": "Aktenzeichen",
+          "type": "text",
+          "required": false,
+          "helper": "Aktenzeichen des Gerichtsverfahrens",
+          "examples": "123 C 456/23",
+          "context": "Eindeutige Zuordnung des Gerichtsverfahrens",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 30,
+          "field_id": "UF-30",
+          "label": "Name der Interessenvertretung",
+          "type": "text",
+          "required": false,
+          "helper": "Name des Rechtsanwalts oder der Interessenvertretung",
+          "examples": "Rechtsanwaltskanzlei Muster & Partner",
+          "context": "Rechtliche Vertretung in der Angelegenheit",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 31,
+          "field_id": "UF-31",
+          "label": "Aktenzeichen",
+          "type": "text",
+          "required": false,
+          "helper": "Aktenzeichen bei der Interessenvertretung",
+          "examples": "MP-2023-0815",
+          "context": "Zuordnung bei der rechtlichen Vertretung",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 32,
+          "field_id": "UF-32",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße der Interessenvertretung",
+          "examples": "Anwaltsstraße",
+          "context": "Anschrift der rechtlichen Vertretung",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 33,
+          "field_id": "UF-33",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer der Interessenvertretung",
+          "examples": "12",
+          "context": "Anschrift der rechtlichen Vertretung",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 34,
+          "field_id": "UF-34",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl der Interessenvertretung",
+          "examples": "10115",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift der rechtlichen Vertretung",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 35,
+          "field_id": "UF-35",
+          "label": "Ort",
+          "type": "text",
+          "required": false,
+          "helper": "Ort der Interessenvertretung",
+          "examples": "Berlin",
+          "context": "Anschrift der rechtlichen Vertretung",
+          "ui_hint": "input_medium"
+        }
+      ]
+    },
+    "C": {
+      "title": "Der Schadensersatzanspruch wurde nicht durch ein Urteil festgestellt",
+      "fields": [
+        {
+          "field_number": 36,
+          "field_id": "UF-36",
+          "label": "Von welchen Stellen sind Sie wegen des Unfalls oder des Schadensereignisses untersucht oder behandelt worden? Wurde ein Gutachten erstellt?",
+          "type": "textarea",
+          "required": false,
+          "helper": "Geben Sie alle Ärzte, Krankenhäuser oder Gutachter an. Soweit vorhanden, fügen Sie bitte diesbezüglich ärztliche Gutachten, soweit sie den Unfall oder das Schadensereignis betreffen, und eine Entbindung von der Schweigepflicht bei",
+          "examples": "Dr. Muster, Allgemeinarzt, Musterstraße 1, 10115 Berlin; Krankenhaus Nord, Gutachten vom 20.06.2023",
+          "context": "Medizinische Behandlung und Dokumentation",
+          "ui_hint": "textarea_large"
+        },
+        {
+          "field_number": 37,
+          "field_id": "UF-37",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße der behandelnden Stelle",
+          "examples": "Arztstraße",
+          "context": "Anschrift der medizinischen Behandlungsstelle",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 38,
+          "field_id": "UF-38",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer der behandelnden Stelle",
+          "examples": "10",
+          "context": "Anschrift der medizinischen Behandlungsstelle",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 39,
+          "field_id": "UF-39",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl der behandelnden Stelle",
+          "examples": "12345",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift der medizinischen Behandlungsstelle",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 40,
+          "field_id": "UF-40",
+          "label": "Ort",
+          "type": "text",
+          "required": false,
+          "helper": "Ort der behandelnden Stelle",
+          "examples": "Musterstadt",
+          "context": "Anschrift der medizinischen Behandlungsstelle",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 41,
+          "field_id": "UF-41",
+          "label": "Name der Polizeibehörde",
+          "type": "text",
+          "required": false,
+          "helper": "Welche Polizeibehörde hat den Unfall oder das Schadensereignis aufgenommen?",
+          "examples": "Polizei Berlin, Abschnitt 15",
+          "context": "Polizeiliche Unfallaufnahme",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 42,
+          "field_id": "UF-42",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße der Polizeibehörde",
+          "examples": "Polizeistraße",
+          "context": "Anschrift der Polizeibehörde",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 43,
+          "field_id": "UF-43",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer der Polizeibehörde",
+          "examples": "5",
+          "context": "Anschrift der Polizeibehörde",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 44,
+          "field_id": "UF-44",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl der Polizeibehörde",
+          "examples": "10115",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift der Polizeibehörde",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 45,
+          "field_id": "UF-45",
+          "label": "Ort",
+          "type": "text",
+          "required": false,
+          "helper": "Ort der Polizeibehörde",
+          "examples": "Berlin",
+          "context": "Anschrift der Polizeibehörde",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 46,
+          "field_id": "UF-46",
+          "label": "Aktenzeichen oder Tagebuchnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Aktenzeichen oder Tagebuchnummer der Polizei",
+          "examples": "TBN 123456/2023",
+          "context": "Eindeutige Zuordnung des Polizeivorgangs",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 47,
+          "field_id": "UF-47",
+          "label": "Ist oder war gegen den Verursacher oder den Schädiger wegen des Schadensereignisses ein Straf- oder Ermittlungsverfahren anhängig?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob ein Strafverfahren läuft oder gelaufen ist",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["UF-48", "UF-49", "UF-50", "UF-51", "UF-52"],
+              "follow_up": "Bitte geben Sie Details zum Strafverfahren an"
+            },
+            "on_nein": {
+              "section_jump": "D",
+              "follow_up": "Weiter bei Abschnitt D"
+            }
+          },
+          "context": "Strafrechtliche Verfolgung des Schadensereignisses",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 48,
+          "field_id": "UF-48",
+          "label": "Vorname",
+          "type": "text",
+          "required": false,
+          "helper": "Vorname der Person, gegen die das Verfahren läuft",
+          "examples": "Max",
+          "context": "Beschuldigte Person im Strafverfahren",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 49,
+          "field_id": "UF-49",
+          "label": "Nachname",
+          "type": "text",
+          "required": false,
+          "helper": "Nachname der Person, gegen die das Verfahren läuft",
+          "examples": "Mustermann",
+          "context": "Beschuldigte Person im Strafverfahren",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 50,
+          "field_id": "UF-50",
+          "label": "Name des Gerichts oder der Staatsanwaltschaft",
+          "type": "text",
+          "required": false,
+          "helper": "Zuständige Staatsanwaltschaft oder Gericht",
+          "examples": "Staatsanwaltschaft Berlin",
+          "context": "Zuständige Behörde für das Strafverfahren",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 51,
+          "field_id": "UF-51",
+          "label": "Aktenzeichen",
+          "type": "text",
+          "required": false,
+          "helper": "Aktenzeichen des Strafverfahrens",
+          "examples": "123 Js 456/23",
+          "context": "Eindeutige Zuordnung des Strafverfahrens",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 52,
+          "field_id": "UF-52",
+          "label": "Ergebnis des Straf- oder Ermittlungsverfahrens",
+          "type": "textarea",
+          "required": false,
+          "helper": "Beschreiben Sie das Ergebnis des Verfahrens",
+          "examples": "Verfahren eingestellt wegen geringfügiger Schuld, Geldbuße von 500 Euro",
+          "context": "Ausgang des Strafverfahrens",
+          "ui_hint": "textarea_medium"
+        }
+      ]
+    },
+    "D": {
+      "title": "Durch einen Leistungsträger wurden bereits Leistungen erbracht",
+      "fields": [
+        {
+          "field_number": 53,
+          "field_id": "UF-53",
+          "label": "Bei welcher Krankenkasse waren Sie zum Zeitpunkt des Unfalls versichert oder mitversichert?",
+          "type": "text",
+          "required": false,
+          "helper": "Name Ihrer Krankenkasse zum Unfallzeitpunkt",
+          "examples": "AOK Berlin",
+          "context": "Krankenversicherung zum Unfallzeitpunkt",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 54,
+          "field_id": "UF-54",
+          "label": "Versichertennummer",
+          "type": "text",
+          "required": false,
+          "helper": "Ihre Versichertennummer bei der Krankenkasse",
+          "examples": "A123456789",
+          "validation": {
+            "pattern": "^[A-Z][0-9]{9}$",
+            "hint": "Ein Buchstabe gefolgt von 9 Ziffern"
+          },
+          "context": "Eindeutige Zuordnung bei der Krankenkasse",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 55,
+          "field_id": "UF-55",
+          "label": "Unfallversicherung - Berufsgenossenschaft oder sonstige - des Betriebes",
+          "type": "text",
+          "required": false,
+          "helper": "Name der Unfallversicherung oder Berufsgenossenschaft",
+          "examples": "BG Bau",
+          "context": "Unfallversicherung des Betriebes",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 56,
+          "field_id": "UF-56",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße der Unfallversicherung",
+          "examples": "BG-Straße",
+          "context": "Anschrift der Unfallversicherung",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 57,
+          "field_id": "UF-57",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer der Unfallversicherung",
+          "examples": "1",
+          "context": "Anschrift der Unfallversicherung",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 58,
+          "field_id": "UF-58",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl der Unfallversicherung",
+          "examples": "12345",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift der Unfallversicherung",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 59,
+          "field_id": "UF-59",
+          "label": "Ort",
+          "type": "text",
+          "required": false,
+          "helper": "Ort der Unfallversicherung",
+          "examples": "Musterstadt",
+          "context": "Anschrift der Unfallversicherung",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 60,
+          "field_id": "UF-60",
+          "label": "Aktenzeichen",
+          "type": "text",
+          "required": false,
+          "helper": "Aktenzeichen bei der Unfallversicherung",
+          "examples": "UV-2023-123456",
+          "context": "Zuordnung bei der Unfallversicherung",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 61,
+          "field_id": "UF-61",
+          "label": "Welche Leistungen wurden beantragt oder bezogen?",
+          "type": "textarea",
+          "required": false,
+          "helper": "Beschreiben Sie, welche Leistungen von Leistungsträgern erbracht wurden",
+          "examples": "Krankengeld von der Krankenkasse vom 15.06. bis 30.08.2023, Heilbehandlung durch BG",
+          "context": "Bereits erbrachte Sozialleistungen",
+          "ui_hint": "textarea_medium"
+        }
+      ]
+    },
+    "E": {
+      "title": "Arbeitsunfall",
+      "fields": [
+        {
+          "field_number": 62,
+          "field_id": "UF-62",
+          "label": "Name des Arbeitgebers",
+          "type": "text",
+          "required": false,
+          "helper": "Bei welchem Arbeitgeber waren Sie zum Zeitpunkt des Unfalls tätig?",
+          "examples": "Muster GmbH",
+          "context": "Arbeitgeber zum Unfallzeitpunkt",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 63,
+          "field_id": "UF-63",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße des Arbeitgebers",
+          "examples": "Industriestraße",
+          "context": "Anschrift des Arbeitgebers",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 64,
+          "field_id": "UF-64",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer des Arbeitgebers",
+          "examples": "10",
+          "context": "Anschrift des Arbeitgebers",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 65,
+          "field_id": "UF-65",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl des Arbeitgebers",
+          "examples": "12345",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift des Arbeitgebers",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 66,
+          "field_id": "UF-66",
+          "label": "Ort",
+          "type": "text",
+          "required": false,
+          "helper": "Ort des Arbeitgebers",
+          "examples": "Musterstadt",
+          "context": "Anschrift des Arbeitgebers",
+          "ui_hint": "input_medium"
+        }
+      ]
+    },
+    "F": {
+      "title": "Verkehrsunfall",
+      "fields": [
+        {
+          "field_number": 67,
+          "field_id": "UF-67",
+          "label": "Ich benutzte ein öffentliches Verkehrsmittel",
+          "type": "radio",
+          "required": false,
+          "helper": "Waren Sie in einem öffentlichen Verkehrsmittel?",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["UF-68"],
+              "follow_up": "Welches öffentliche Verkehrsmittel haben Sie benutzt?"
+            },
+            "on_nein": {
+              "section_jump": "UF-69",
+              "follow_up": "Weiter mit Frage 69"
+            }
+          },
+          "context": "Nutzung öffentlicher Verkehrsmittel",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 68,
+          "field_id": "UF-68",
+          "label": "Welches öffentliche Verkehrsmittel haben Sie benutzt?",
+          "type": "radio",
+          "required": false,
+          "helper": "Art des öffentlichen Verkehrsmittels",
+          "options": [
+            {
+              "value": "bus",
+              "label": "Bus"
+            },
+            {
+              "value": "eisenbahn",
+              "label": "Eisenbahn"
+            },
+            {
+              "value": "strassenbahn",
+              "label": "Straßenbahn"
+            },
+            {
+              "value": "sonstiges",
+              "label": "sonstiges - bitte angeben"
+            }
+          ],
+          "context": "Art des öffentlichen Verkehrsmittels",
+          "ui_hint": "radio_vertical"
+        },
+        {
+          "field_number": 69,
+          "field_id": "UF-69",
+          "label": "An dem Unfall war ich als Fußgänger beteiligt",
+          "type": "radio",
+          "required": false,
+          "helper": "Waren Sie als Fußgänger am Unfall beteiligt?",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "context": "Beteiligung als Fußgänger",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 70,
+          "field_id": "UF-70",
+          "label": "An dem Unfall war ich mit einem Fahrzeug beteiligt",
+          "type": "radio",
+          "required": false,
+          "helper": "Waren Sie mit einem Fahrzeug am Unfall beteiligt?",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["UF-71", "UF-72", "UF-73"],
+              "follow_up": "Bitte geben Sie Details zu Ihrem Fahrzeug an"
+            },
+            "on_nein": {
+              "section_jump": "UF-89",
+              "follow_up": "Weiter mit Frage 89"
+            }
+          },
+          "context": "Fahrzeugbeteiligung",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 71,
+          "field_id": "UF-71",
+          "label": "Welches Fahrzeug war beteiligt?",
+          "type": "radio",
+          "required": false,
+          "helper": "Art Ihres beteiligten Fahrzeugs",
+          "options": [
+            {
+              "value": "fahrrad",
+              "label": "Fahrrad"
+            },
+            {
+              "value": "motorrad",
+              "label": "Motorrad"
+            },
+            {
+              "value": "pkw",
+              "label": "PKW"
+            },
+            {
+              "value": "lkw",
+              "label": "LKW"
+            },
+            {
+              "value": "escooter",
+              "label": "E-Scooter"
+            },
+            {
+              "value": "sonstiges",
+              "label": "Sonstiges - bitte angeben"
+            }
+          ],
+          "context": "Art des beteiligten Fahrzeugs",
+          "ui_hint": "radio_vertical"
+        },
+        {
+          "field_number": 72,
+          "field_id": "UF-72",
+          "label": "Amtliches Kennzeichen des beteiligten Fahrzeugs",
+          "type": "text",
+          "required": false,
+          "helper": "Kennzeichen Ihres Fahrzeugs",
+          "examples": "B-MW 1234",
+          "context": "Eindeutige Fahrzeugidentifikation",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 73,
+          "field_id": "UF-73",
+          "label": "Ich war",
+          "type": "radio",
+          "required": false,
+          "helper": "Ihre Rolle im Fahrzeug",
+          "options": [
+            {
+              "value": "fahrer",
+              "label": "Fahrer"
+            },
+            {
+              "value": "mitfahrer",
+              "label": "Mitfahrer"
+            }
+          ],
+          "dependencies": {
+            "on_fahrer": {
+              "section_jump": "UF-86",
+              "follow_up": "Weiter mit Frage 86"
+            },
+            "on_mitfahrer": {
+              "fields": ["UF-74", "UF-75", "UF-76", "UF-77", "UF-78", "UF-79"],
+              "follow_up": "Bitte geben Sie Angaben zum Fahrer an"
+            }
+          },
+          "context": "Position im Fahrzeug",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 74,
+          "field_id": "UF-74",
+          "label": "Vorname",
+          "type": "text",
+          "required": false,
+          "helper": "Vorname des Fahrers",
+          "examples": "Max",
+          "context": "Angaben zum Fahrer",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 75,
+          "field_id": "UF-75",
+          "label": "Nachname",
+          "type": "text",
+          "required": false,
+          "helper": "Nachname des Fahrers",
+          "examples": "Mustermann",
+          "context": "Angaben zum Fahrer",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 76,
+          "field_id": "UF-76",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße des Fahrers",
+          "examples": "Fahrerstraße",
+          "context": "Anschrift des Fahrers",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 77,
+          "field_id": "UF-77",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer des Fahrers",
+          "examples": "5",
+          "context": "Anschrift des Fahrers",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 78,
+          "field_id": "UF-78",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl des Fahrers",
+          "examples": "12345",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift des Fahrers",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 79,
+          "field_id": "UF-79",
+          "label": "Wohnort",
+          "type": "text",
+          "required": false,
+          "helper": "Wohnort des Fahrers",
+          "examples": "Musterstadt",
+          "context": "Anschrift des Fahrers",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 80,
+          "field_id": "UF-80",
+          "label": "Vorname",
+          "type": "text",
+          "required": false,
+          "helper": "Vorname des Fahrzeughalters",
+          "examples": "Maria",
+          "context": "Angaben zum Halter des Fahrzeugs",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 81,
+          "field_id": "UF-81",
+          "label": "Nachname",
+          "type": "text",
+          "required": false,
+          "helper": "Nachname des Fahrzeughalters",
+          "examples": "Musterfrau",
+          "context": "Angaben zum Halter des Fahrzeugs",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 82,
+          "field_id": "UF-82",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße des Fahrzeughalters",
+          "examples": "Halterstraße",
+          "context": "Anschrift des Fahrzeughalters",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 83,
+          "field_id": "UF-83",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer des Fahrzeughalters",
+          "examples": "8",
+          "context": "Anschrift des Fahrzeughalters",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 84,
+          "field_id": "UF-84",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl des Fahrzeughalters",
+          "examples": "54321",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift des Fahrzeughalters",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 85,
+          "field_id": "UF-85",
+          "label": "Wohnort",
+          "type": "text",
+          "required": false,
+          "helper": "Wohnort des Fahrzeughalters",
+          "examples": "Beispielort",
+          "context": "Anschrift des Fahrzeughalters",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 86,
+          "field_id": "UF-86",
+          "label": "Versichert ist das Fahrzeug bei folgender Versicherungsgesellschaft",
+          "type": "text",
+          "required": false,
+          "helper": "Name der Kfz-Versicherung",
+          "examples": "Muster Kfz-Versicherung AG",
+          "context": "Fahrzeugversicherung für Schadensregulierung",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 87,
+          "field_id": "UF-87",
+          "label": "Schadennummer",
+          "type": "text",
+          "required": false,
+          "helper": "Schadennummer bei der Kfz-Versicherung",
+          "examples": "KFZ-2023-987654",
+          "context": "Eindeutige Schadenszuordnung",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 88,
+          "field_id": "UF-88",
+          "label": "Waren noch andere Verkehrsteilnehmer oder ein anderes Fahrzeug beteiligt?",
+          "type": "radio",
+          "required": false,
+          "helper": "Weitere Unfallbeteiligte",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["UF-89", "UF-90", "UF-91", "UF-92", "UF-93", "UF-94", "UF-95", "UF-96", "UF-97", "UF-98", "UF-99", "UF-100", "UF-101", "UF-102", "UF-103", "UF-104", "UF-105", "UF-106", "UF-107", "UF-108"],
+              "follow_up": "Bitte geben Sie Angaben zu weiteren beteiligten Personen und Fahrzeugen an"
+            },
+            "on_nein": {
+              "section_jump": "G",
+              "follow_up": "Weiter bei Abschnitt G"
+            }
+          },
+          "context": "Weitere Unfallbeteiligte",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 89,
+          "field_id": "UF-89",
+          "label": "Vorname",
+          "type": "text",
+          "required": false,
+          "helper": "Vorname der beteiligten Person",
+          "examples": "Anna",
+          "context": "Beteiligte Person",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 90,
+          "field_id": "UF-90",
+          "label": "Nachname",
+          "type": "text",
+          "required": false,
+          "helper": "Nachname der beteiligten Person",
+          "examples": "Beispiel",
+          "context": "Beteiligte Person",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 91,
+          "field_id": "UF-91",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße der beteiligten Person",
+          "examples": "Beispielgasse",
+          "context": "Anschrift der beteiligten Person",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 92,
+          "field_id": "UF-92",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer der beteiligten Person",
+          "examples": "3",
+          "context": "Anschrift der beteiligten Person",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 93,
+          "field_id": "UF-93",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl der beteiligten Person",
+          "examples": "98765",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift der beteiligten Person",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 94,
+          "field_id": "UF-94",
+          "label": "Wohnort",
+          "type": "text",
+          "required": false,
+          "helper": "Wohnort der beteiligten Person",
+          "examples": "Testdorf",
+          "context": "Anschrift der beteiligten Person",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 95,
+          "field_id": "UF-95",
+          "label": "Welches weitere Fahrzeug war beteiligt?",
+          "type": "radio",
+          "required": false,
+          "helper": "Art des weiteren beteiligten Fahrzeugs",
+          "options": [
+            {
+              "value": "fahrrad",
+              "label": "Fahrrad"
+            },
+            {
+              "value": "motorrad",
+              "label": "Motorrad"
+            },
+            {
+              "value": "pkw",
+              "label": "PKW"
+            },
+            {
+              "value": "lkw",
+              "label": "LKW"
+            },
+            {
+              "value": "escooter",
+              "label": "E-Scooter"
+            },
+            {
+              "value": "sonstiges",
+              "label": "sonstiges - bitte angeben"
+            }
+          ],
+          "context": "Art des weiteren beteiligten Fahrzeugs",
+          "ui_hint": "radio_vertical"
+        },
+        {
+          "field_number": 96,
+          "field_id": "UF-96",
+          "label": "Amtliches Kennzeichen des beteiligten Fahrzeugs",
+          "type": "text",
+          "required": false,
+          "helper": "Kennzeichen des weiteren Fahrzeugs",
+          "examples": "M-AB 9876",
+          "context": "Eindeutige Fahrzeugidentifikation",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 97,
+          "field_id": "UF-97",
+          "label": "Vorname",
+          "type": "text",
+          "required": false,
+          "helper": "Vorname des Fahrers des anderen Fahrzeugs",
+          "examples": "Peter",
+          "context": "Fahrer des anderen Fahrzeugs",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 98,
+          "field_id": "UF-98",
+          "label": "Nachname",
+          "type": "text",
+          "required": false,
+          "helper": "Nachname des Fahrers des anderen Fahrzeugs",
+          "examples": "Schmidt",
+          "context": "Fahrer des anderen Fahrzeugs",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 99,
+          "field_id": "UF-99",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße des Fahrers des anderen Fahrzeugs",
+          "examples": "Schmidtstraße",
+          "context": "Anschrift des Fahrers des anderen Fahrzeugs",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 100,
+          "field_id": "UF-100",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer des Fahrers des anderen Fahrzeugs",
+          "examples": "7",
+          "context": "Anschrift des Fahrers des anderen Fahrzeugs",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 101,
+          "field_id": "UF-101",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl des Fahrers des anderen Fahrzeugs",
+          "examples": "13579",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift des Fahrers des anderen Fahrzeugs",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 102,
+          "field_id": "UF-102",
+          "label": "Wohnort",
+          "type": "text",
+          "required": false,
+          "helper": "Wohnort des Fahrers des anderen Fahrzeugs",
+          "examples": "Fahrerdorf",
+          "context": "Anschrift des Fahrers des anderen Fahrzeugs",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 103,
+          "field_id": "UF-103",
+          "label": "Vorname",
+          "type": "text",
+          "required": false,
+          "helper": "Vorname des Halters des anderen Fahrzeugs",
+          "examples": "Petra",
+          "context": "Halter des anderen Fahrzeugs",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 104,
+          "field_id": "UF-104",
+          "label": "Nachname",
+          "type": "text",
+          "required": false,
+          "helper": "Nachname des Halters des anderen Fahrzeugs",
+          "examples": "Schmidt",
+          "context": "Halter des anderen Fahrzeugs",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 105,
+          "field_id": "UF-105",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße des Halters des anderen Fahrzeugs",
+          "examples": "Halterweg",
+          "context": "Anschrift des Halters des anderen Fahrzeugs",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 106,
+          "field_id": "UF-106",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer des Halters des anderen Fahrzeugs",
+          "examples": "9",
+          "context": "Anschrift des Halters des anderen Fahrzeugs",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 107,
+          "field_id": "UF-107",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl des Halters des anderen Fahrzeugs",
+          "examples": "24680",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift des Halters des anderen Fahrzeugs",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 108,
+          "field_id": "UF-108",
+          "label": "Wohnort",
+          "type": "text",
+          "required": false,
+          "helper": "Wohnort des Halters des anderen Fahrzeugs",
+          "examples": "Halterhausen",
+          "context": "Anschrift des Halters des anderen Fahrzeugs",
+          "ui_hint": "input_medium"
+        }
+      ]
+    },
+    "G": {
+      "title": "Sonstiges Schadensereignis",
+      "fields": [
+        {
+          "field_number": 109,
+          "field_id": "UF-109",
+          "label": "Schadensereignis durch Sportunfall?",
+          "type": "radio",
+          "required": false,
+          "helper": "War das Schadensereignis ein Sportunfall?",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_nein": {
+              "section_jump": "UF-111",
+              "follow_up": "Weiter mit Frage 111"
+            }
+          },
+          "context": "Einordnung als Sportunfall",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 110,
+          "field_id": "UF-110",
+          "label": "Schadensereignis durch ärztlichen Behandlungsfehler?",
+          "type": "radio",
+          "required": false,
+          "helper": "War das Schadensereignis durch einen ärztlichen Behandlungsfehler verursacht?",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_nein": {
+              "section_jump": "UF-117",
+              "follow_up": "Weiter mit Frage 117"
+            }
+          },
+          "context": "Behandlungsfehler als Schadensursache",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 111,
+          "field_id": "UF-111",
+          "label": "Ist ein Verfahren von der Schlichtungsstelle der Arzthaftpflichtschäden anhängig?",
+          "type": "radio",
+          "required": false,
+          "helper": "Läuft ein Schlichtungsverfahren?",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["UF-112", "UF-113", "UF-114", "UF-115", "UF-116"],
+              "follow_up": "Bitte geben Sie Angaben zur Schlichtungsstelle an"
+            },
+            "on_nein": {
+              "section_jump": "UF-117",
+              "follow_up": "Weiter mit Frage 117"
+            }
+          },
+          "context": "Außergerichtliche Streitbeilegung",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 112,
+          "field_id": "UF-112",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße der Schlichtungsstelle",
+          "examples": "Schlichtungsstraße",
+          "context": "Anschrift der Schlichtungsstelle",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 113,
+          "field_id": "UF-113",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer der Schlichtungsstelle",
+          "examples": "11",
+          "context": "Anschrift der Schlichtungsstelle",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 114,
+          "field_id": "UF-114",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl der Schlichtungsstelle",
+          "examples": "11111",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift der Schlichtungsstelle",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 115,
+          "field_id": "UF-115",
+          "label": "Ort",
+          "type": "text",
+          "required": false,
+          "helper": "Ort der Schlichtungsstelle",
+          "examples": "Schlichtungsort",
+          "context": "Anschrift der Schlichtungsstelle",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 116,
+          "field_id": "UF-116",
+          "label": "Schadennummer oder AZ",
+          "type": "text",
+          "required": false,
+          "helper": "Schadennummer oder Aktenzeichen bei der Schlichtungsstelle",
+          "examples": "SL-2023-456789",
+          "context": "Zuordnung bei der Schlichtungsstelle",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 117,
+          "field_id": "UF-117",
+          "label": "Schadensereignis durch Körperverletzung - tätliche Auseinandersetzung, Überfall oder ähnliches?",
+          "type": "radio",
+          "required": false,
+          "helper": "War das Schadensereignis durch Gewalt verursacht?",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "context": "Gewaltsame Schadensentstehung",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 118,
+          "field_id": "UF-118",
+          "label": "Verletzung durch Tiere?",
+          "type": "radio",
+          "required": false,
+          "helper": "Wurde die Verletzung durch ein Tier verursacht?",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["UF-119", "UF-120", "UF-121", "UF-122", "UF-123", "UF-124", "UF-125", "UF-126", "UF-127", "UF-128"],
+              "follow_up": "Bitte geben Sie Details zur Tierverletzung an"
+            },
+            "on_nein": {
+              "section_jump": "H",
+              "follow_up": "Weiter bei Abschnitt H"
+            }
+          },
+          "context": "Tierschaden als Schadensursache",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 119,
+          "field_id": "UF-119",
+          "label": "Durch eine(n)",
+          "type": "radio",
+          "required": false,
+          "helper": "Art der Tierverletzung",
+          "options": [
+            {
+              "value": "verkehrsunfall",
+              "label": "Verkehrsunfall"
+            },
+            {
+              "value": "bissverletzung",
+              "label": "Bissverletzung"
+            },
+            {
+              "value": "wildunfall",
+              "label": "Wildunfall"
+            },
+            {
+              "value": "sonstige",
+              "label": "sonstige Ursache - bitte angeben"
+            }
+          ],
+          "dependencies": {
+            "on_verkehrsunfall": {
+              "section_jump": "UF-121",
+              "follow_up": "Weiter mit Frage 121"
+            },
+            "on_bissverletzung": {
+              "section_jump": "UF-121",
+              "follow_up": "Weiter mit Frage 121"
+            },
+            "on_wildunfall": {
+              "section_jump": "UF-121",
+              "follow_up": "Weiter mit Frage 121"
+            },
+            "on_sonstige": {
+              "fields": ["UF-120"],
+              "follow_up": "Bitte geben Sie die sonstige Ursache an"
+            }
+          },
+          "context": "Art der Tierverletzung",
+          "ui_hint": "radio_vertical"
+        },
+        {
+          "field_number": 120,
+          "field_id": "UF-120",
+          "label": "Wenn sonstige Ursache, bitte angeben",
+          "type": "text",
+          "required": false,
+          "helper": "Beschreiben Sie die sonstige Ursache der Tierverletzung",
+          "examples": "Sturz vom Pferd, Tritt durch Kuh",
+          "context": "Spezifische Ursache der Tierverletzung",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 121,
+          "field_id": "UF-121",
+          "label": "Um welches Tier handelt es sich - zum Beispiel Hund, Katze, Pferd, Wildtier oder ähnliches?",
+          "type": "text",
+          "required": false,
+          "helper": "Art des verursachenden Tieres",
+          "examples": "Hund, Katze, Pferd, Wildschwein",
+          "context": "Tierart für Haftungsbestimmung",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 122,
+          "field_id": "UF-122",
+          "label": "Vorname",
+          "type": "text",
+          "required": false,
+          "helper": "Vorname des Tierhalters",
+          "examples": "Klaus",
+          "context": "Angaben zum Halter des Tieres",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 123,
+          "field_id": "UF-123",
+          "label": "Nachname",
+          "type": "text",
+          "required": false,
+          "helper": "Nachname des Tierhalters",
+          "examples": "Tierfreund",
+          "context": "Angaben zum Halter des Tieres",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 124,
+          "field_id": "UF-124",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße des Tierhalters",
+          "examples": "Tierhalterstraße",
+          "context": "Anschrift des Tierhalters",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 125,
+          "field_id": "UF-125",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer des Tierhalters",
+          "examples": "13",
+          "context": "Anschrift des Tierhalters",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 126,
+          "field_id": "UF-126",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl des Tierhalters",
+          "examples": "22222",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift des Tierhalters",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 127,
+          "field_id": "UF-127",
+          "label": "Wohnort",
+          "type": "text",
+          "required": false,
+          "helper": "Wohnort des Tierhalters",
+          "examples": "Tierdorf",
+          "context": "Anschrift des Tierhalters",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 128,
+          "field_id": "UF-128",
+          "label": "Wurde der Unfall dem Tierhalter gemeldet?",
+          "type": "radio",
+          "required": false,
+          "helper": "Haben Sie den Tierhalter über den Unfall informiert?",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_nein": {
+              "section_jump": "H",
+              "follow_up": "Weiter bei Abschnitt H"
+            }
+          },
+          "context": "Information des Tierhalters über den Schaden",
+          "ui_hint": "radio_inline"
+        }
+      ]
+    },
+    "H": {
+      "title": "Unterschrift",
+      "fields": [
+        {
+          "field_number": 129,
+          "field_id": "UF-129",
+          "label": "Ich versichere die Richtigkeit meiner Angaben",
+          "type": "checkbox",
+          "required": true,
+          "helper": "Bestätigen Sie die Richtigkeit Ihrer Angaben",
+          "options": [
+            {
+              "value": "bestaetigt",
+              "label": "Ich versichere die Richtigkeit meiner Angaben"
+            }
+          ],
+          "context": "Rechtliche Versicherung der Angaben",
+          "ui_hint": "checkbox_required"
+        },
+        {
+          "field_number": 130,
+          "field_id": "UF-130",
+          "label": "Ort",
+          "type": "text",
+          "required": true,
+          "helper": "Ort der Unterschrift",
+          "examples": "Berlin",
+          "context": "Ort der Unterschrift für rechtliche Gültigkeit",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 131,
+          "field_id": "UF-131",
+          "label": "Datum",
+          "type": "date",
+          "required": true,
+          "helper": "Datum der Unterschrift",
+          "examples": "11.09.2025",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Datum der Unterschrift",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 132,
+          "field_id": "UF-132",
+          "label": "Unterschrift der Antragstellerin oder des Antragstellers",
+          "type": "signature",
+          "required": true,
+          "helper": "Ihre rechtsverbindliche Unterschrift. Hinweis: Bei elektronischer Antragstellung über ihren Online-Zugang ist eine Unterschrift nicht erforderlich",
+          "context": "Rechtsgültige Unterschrift des Antragstellers",
+          "ui_hint": "signature_pad"
+        }
+      ]
+    }
+  },
+  "legal_reference": "§ 116 des Zehnten Buches Sozialgesetzbuch - SGB X",
+  "form_info": {
+    "note": "Zutreffendes bitte ausfüllen oder ankreuzen. Pflichtfelder sind mit Stern * markiert.",
+    "electronic_submission": "Bei elektronischer Antragstellung über den Online-Zugang ist eine Unterschrift nicht erforderlich"
+  }
+}

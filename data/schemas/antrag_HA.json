@@ -1,0 +1,1900 @@
+{
+  "form_name": "Hauptantrag Bürgergeld HA",
+  "description": "Antrag auf Bürgergeld nach dem Zweiten Buch Sozialgesetzbuch (SGB II)",
+  "sections": {
+    "A": {
+      "title": "Persönliche Daten der antragstellenden Person",
+      "fields": [
+        {
+          "field_number": 1,
+          "field_id": "HA-01",
+          "label": "Vorname",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihren Vornamen ein",
+          "examples": "Maria",
+          "validation": {
+            "pattern": "^[a-zA-ZäöüÄÖÜß\\s-]+$",
+            "hint": "Nur Buchstaben, Leerzeichen und Bindestriche erlaubt"
+          },
+          "context": "Ihr Vorname wird für die Identifikation und Korrespondenz benötigt",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 2,
+          "field_id": "HA-02",
+          "label": "Nachname",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihren Nachnamen ein",
+          "examples": "Müller",
+          "validation": {
+            "pattern": "^[a-zA-ZäöüÄÖÜß\\s-]+$",
+            "hint": "Nur Buchstaben, Leerzeichen und Bindestriche erlaubt"
+          },
+          "context": "Ihr Nachname wird für die Identifikation benötigt",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 3,
+          "field_id": "HA-03",
+          "label": "Geburtsdatum (TT.MM.JJJJ)",
+          "type": "date",
+          "required": true,
+          "helper": "Geben Sie Ihr Geburtsdatum im Format TT.MM.JJJJ ein",
+          "examples": "15.03.1985",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Ihr Geburtsdatum bestimmt Ihren Anspruch auf verschiedene Leistungen",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 4,
+          "field_id": "HA-04",
+          "label": "Geburtsname/früherer Name",
+          "type": "text",
+          "required": false,
+          "helper": "Falls Sie Ihren Namen geändert haben, geben Sie hier Ihren Geburtsnamen oder früheren Namen an",
+          "examples": "Schmidt",
+          "context": "Wird für die Überprüfung früherer Unterlagen benötigt",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 5,
+          "field_id": "HA-05",
+          "label": "Geburtsort",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie den Ort an, in dem Sie geboren wurden",
+          "examples": "Berlin",
+          "context": "Der Geburtsort wird für die Identifikation benötigt",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 6,
+          "field_id": "HA-06",
+          "label": "Geburtsland",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie das Land an, in dem Sie geboren wurden",
+          "examples": "Deutschland",
+          "context": "Das Geburtsland bestimmt bestimmte Anspruchsvoraussetzungen",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 7,
+          "field_id": "HA-07",
+          "label": "Staatsangehörigkeit",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihre Staatsangehörigkeit an",
+          "examples": "deutsch",
+          "context": "Die Staatsangehörigkeit beeinflusst Ihre Ansprüche auf Bürgergeld",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 8,
+          "field_id": "HA-08",
+          "label": "Geschlecht",
+          "type": "radio",
+          "required": true,
+          "helper": "Wählen Sie Ihr Geschlecht aus",
+          "options": [
+            {
+              "value": "maennlich",
+              "label": "männlich"
+            },
+            {
+              "value": "weiblich",
+              "label": "weiblich"
+            },
+            {
+              "value": "divers",
+              "label": "divers"
+            },
+            {
+              "value": "keine_angabe",
+              "label": "keine Angabe"
+            }
+          ],
+          "context": "Diese Angabe ist für statistische Zwecke erforderlich",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 9,
+          "field_id": "HA-09",
+          "label": "Straße",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie den Namen Ihrer Straße ein",
+          "examples": "Musterstraße",
+          "context": "Ihre Adresse wird für die Zustellung von Briefen benötigt",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 10,
+          "field_id": "HA-10",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihre Hausnummer ein",
+          "examples": "42a",
+          "validation": {
+            "pattern": "^[0-9]+[a-zA-Z]?$",
+            "hint": "Zahlen und optional ein Buchstabe"
+          },
+          "context": "Die Hausnummer vervollständigt Ihre Adresse",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 11,
+          "field_id": "HA-11",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihre fünfstellige Postleitzahl ein",
+          "examples": "10115",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "Genau 5 Ziffern"
+          },
+          "context": "Die Postleitzahl bestimmt das zuständige Jobcenter",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 12,
+          "field_id": "HA-12",
+          "label": "Wohnort",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihren Wohnort ein",
+          "examples": "Berlin",
+          "context": "Ihr Wohnort bestimmt die örtliche Zuständigkeit",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 13,
+          "field_id": "HA-13",
+          "label": "Postfachanschrift",
+          "type": "text",
+          "required": false,
+          "helper": "Falls Sie ein Postfach haben, geben Sie die Anschrift hier ein",
+          "examples": "Postfach 123456, 10115 Berlin",
+          "context": "Alternative Postanschrift falls gewünscht",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 14,
+          "field_id": "HA-14",
+          "label": "Telefon (freiwillige Angabe für Rückfragen)",
+          "type": "text",
+          "required": false,
+          "helper": "Geben Sie Ihre Telefonnummer für Rückfragen an (freiwillig)",
+          "examples": "030 12345678",
+          "validation": {
+            "pattern": "^[0-9\\s\\+\\-\\/\\(\\)]+$",
+            "hint": "Telefonnummer mit Vorwahl"
+          },
+          "context": "Erleichtert die Kontaktaufnahme bei Rückfragen",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": null,
+          "field_id": "HA-14a",
+          "label": "Es ist kein fester Wohnsitz vorhanden",
+          "type": "checkbox",
+          "required": false,
+          "helper": "Kreuzen Sie an, falls Sie keinen festen Wohnsitz haben",
+          "options": [
+            {
+              "value": "kein_wohnsitz",
+              "label": "Es ist kein fester Wohnsitz vorhanden"
+            }
+          ],
+          "context": "Für Personen ohne festen Wohnsitz",
+          "ui_hint": "checkbox_single"
+        },
+        {
+          "field_number": 15,
+          "field_id": "HA-15",
+          "label": "Gegebenenfalls wohnhaft bei (Name und Anschrift Person/Einrichtung)",
+          "type": "textarea",
+          "required": false,
+          "helper": "Falls Sie bei einer anderen Person oder Einrichtung wohnen, geben Sie hier Name und Anschrift an",
+          "examples": "Max Mustermann, Beispielweg 1, 12345 Musterstadt",
+          "context": "Wichtig wenn Sie keinen eigenen Mietvertrag haben",
+          "ui_hint": "textarea_medium"
+        },
+        {
+          "field_number": 16,
+          "field_id": "HA-16",
+          "label": "Kontoinhaberin/Kontoinhaber",
+          "type": "text",
+          "required": false,
+          "helper": "Name der Person, auf die das Bankkonto läuft",
+          "examples": "Maria Müller",
+          "dependencies": {
+            "on_filled": {
+              "fields": ["HA-17"],
+              "follow_up": "Bitte geben Sie auch die IBAN an"
+            }
+          },
+          "context": "Für die Überweisung des Bürgergeldes",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 17,
+          "field_id": "HA-17",
+          "label": "IBAN (22-stellig)",
+          "type": "text",
+          "required": false,
+          "helper": "Internationale Bankkontonummer für Überweisungen",
+          "examples": "DE89 3704 0044 0532 0130 00",
+          "validation": {
+            "pattern": "^DE[0-9]{20}$",
+            "hint": "Deutsche IBAN beginnt mit DE und hat 22 Stellen"
+          },
+          "context": "Notwendig für die Auszahlung der Leistungen",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": null,
+          "field_id": "HA-17a",
+          "label": "Es ist keine Bankverbindung vorhanden",
+          "type": "checkbox",
+          "required": false,
+          "helper": "Kreuzen Sie an, falls Sie kein Bankkonto haben",
+          "options": [
+            {
+              "value": "kein_konto",
+              "label": "Es ist keine Bankverbindung vorhanden"
+            }
+          ],
+          "legal_reference": "Hinweis 1 Konto",
+          "context": "Alternative für Personen ohne Bankkonto",
+          "ui_hint": "checkbox_single"
+        },
+        {
+          "field_number": 18,
+          "field_id": "HA-18",
+          "label": "Haben Sie eine Sozial-/Rentenversicherungsnummer?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie eine Sozial- oder Rentenversicherungsnummer haben",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-19"],
+              "follow_up": "Bitte geben Sie Ihre Sozial-/Rentenversicherungsnummer an"
+            },
+            "on_nein": {
+              "section_jump": "HA-20",
+              "follow_up": "Weiter mit Frage 20"
+            }
+          },
+          "legal_reference": "Hinweis 2 Rentenversicherungsnummer/Sozialversicherungsnummer",
+          "context": "Zur Zuordnung Ihrer Beitragszeiten",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 19,
+          "field_id": "HA-19",
+          "label": "Bitte geben Sie Ihre Sozial-/Rentenversicherungsnummer an",
+          "type": "text",
+          "required": false,
+          "helper": "12-stellige Nummer auf Ihrem Sozialversicherungsausweis",
+          "examples": "12 345678 A 123",
+          "validation": {
+            "pattern": "^[0-9]{2}\\s[0-9]{6}\\s[A-Z]\\s[0-9]{3}$",
+            "hint": "Format: 12 345678 A 123"
+          },
+          "context": "Eindeutige Identifikation im Sozialversicherungssystem",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 20,
+          "field_id": "HA-20",
+          "label": "Haben Sie eine gesetzlich bestellte Betreuerin/einen gesetzlich bestellten Betreuer oder Vormund?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie unter rechtlicher Betreuung stehen",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte fügen Sie eine Kopie der Bestellungsurkunde oder des Betreuerausweises bei"
+            }
+          },
+          "context": "Wichtig für die rechtliche Vertretung",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 21,
+          "field_id": "HA-21",
+          "label": "Datum Ihrer Einreise nach Deutschland (TT.MM.JJJJ)",
+          "type": "date",
+          "required": false,
+          "helper": "Nur ausfüllen, wenn Sie keine deutsche Staatsangehörigkeit haben und zuvor im Ausland gelebt haben",
+          "examples": "15.06.2020",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Bestimmt Wartezeiten und Anspruchsvoraussetzungen",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 22,
+          "field_id": "HA-22",
+          "label": "Haben Sie eine gültige Aufenthaltsgenehmigung?",
+          "type": "radio",
+          "required": false,
+          "helper": "Nur beantworten, wenn Ihre Staatsangehörigkeit nicht deutsch ist",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte fügen Sie die Aufenthaltsgenehmigung bei"
+            }
+          },
+          "context": "Notwendig für Anspruch auf Bürgergeld",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 23,
+          "field_id": "HA-23",
+          "label": "Wurde für Sie eine Verpflichtungserklärung abgegeben?",
+          "type": "radio",
+          "required": true,
+          "helper": "Eine Verpflichtungserklärung wird abgegeben, wenn jemand für Ihre Kosten bürgt",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte fügen Sie eine Kopie der Verpflichtungserklärung oder einen anderen Nachweis bei"
+            }
+          },
+          "legal_reference": "Hinweis 3 Verpflichtungserklärung",
+          "context": "Kann Ihre Ansprüche auf öffentliche Leistungen beeinflussen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 24,
+          "field_id": "HA-24",
+          "label": "Bitte geben Sie Ihren aktuellen Familienstand an",
+          "type": "radio",
+          "required": true,
+          "helper": "Wählen Sie Ihren aktuellen Familienstand aus",
+          "options": [
+            {
+              "value": "ledig",
+              "label": "ledig"
+            },
+            {
+              "value": "verheiratet",
+              "label": "verheiratet"
+            },
+            {
+              "value": "verwitwet",
+              "label": "verwitwet"
+            },
+            {
+              "value": "lebenspartnerschaft",
+              "label": "eingetragene Lebenspartnerschaft"
+            },
+            {
+              "value": "getrennt",
+              "label": "dauernd getrennt lebend"
+            },
+            {
+              "value": "geschieden",
+              "label": "geschieden"
+            },
+            {
+              "value": "aufgehoben",
+              "label": "aufgehobene Lebenspartnerschaft"
+            }
+          ],
+          "dependencies": {
+            "on_ledig": {
+              "section_jump": "B",
+              "follow_up": "Weiter mit Abschnitt B"
+            },
+            "on_verheiratet": {
+              "section_jump": "B",
+              "follow_up": "Weiter mit Abschnitt B"
+            },
+            "on_verwitwet": {
+              "section_jump": "B",
+              "follow_up": "Weiter mit Abschnitt B"
+            },
+            "on_lebenspartnerschaft": {
+              "section_jump": "B",
+              "follow_up": "Weiter mit Abschnitt B"
+            },
+            "on_getrennt": {
+              "fields": ["HA-25"],
+              "follow_up": "Bitte füllen Sie auch die Anlage UH1 aus"
+            },
+            "on_geschieden": {
+              "fields": ["HA-25"],
+              "follow_up": "Bitte füllen Sie auch die Anlage UH1 aus"
+            },
+            "on_aufgehoben": {
+              "fields": ["HA-25"],
+              "follow_up": "Bitte füllen Sie auch die Anlage UH1 aus"
+            }
+          },
+          "context": "Bestimmt die Höhe Ihrer Leistungen und Bedarfsgemeinschaft",
+          "ui_hint": "radio_vertical"
+        },
+        {
+          "field_number": 25,
+          "field_id": "HA-25",
+          "label": "Seit wann sind Sie dauernd getrennt lebend, geschieden oder wann wurde Ihre Lebenspartnerschaft aufgehoben?",
+          "type": "date",
+          "required": false,
+          "helper": "Geben Sie das Datum der Trennung, Scheidung oder Aufhebung an",
+          "examples": "01.01.2023",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Wichtig für die Berechnung Ihrer Bedarfsgemeinschaft",
+          "ui_hint": "date_picker"
+        }
+      ]
+    },
+    "B": {
+      "title": "Antragstellung",
+      "fields": [
+        {
+          "field_number": 26,
+          "field_id": "HA-26",
+          "label": "Ab welchem Zeitpunkt möchten Sie Bürgergeld beantragen?",
+          "type": "radio",
+          "required": true,
+          "helper": "Wählen Sie, ab wann Sie Bürgergeld erhalten möchten",
+          "options": [
+            {
+              "value": "sofort",
+              "label": "ab sofort"
+            },
+            {
+              "value": "spaeter",
+              "label": "ab einem späteren Zeitpunkt"
+            }
+          ],
+          "dependencies": {
+            "on_spaeter": {
+              "follow_up": "Bitte geben Sie das gewünschte Startdatum an (TT.MM.JJJJ)"
+            }
+          },
+          "legal_reference": "Hinweis 4 Antragstellung",
+          "context": "Bestimmt den Beginn Ihrer Leistungen",
+          "ui_hint": "radio_inline"
+        }
+      ]
+    },
+    "C": {
+      "title": "Angaben zur Lebenssituation",
+      "fields": [
+        {
+          "field_number": 27,
+          "field_id": "HA-27",
+          "label": "Sind Sie erwerbsfähig?",
+          "type": "radio",
+          "required": true,
+          "helper": "Dies bedeutet, Sie sind grundsätzlich gesundheitlich in der Lage, regelmäßig eine Tätigkeit von mindestens drei Stunden täglich auszuüben",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "legal_reference": "Hinweis 5 Erwerbsfähigkeit",
+          "context": "Bestimmt die Art der Leistungen, die Sie erhalten können",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 28,
+          "field_id": "HA-28",
+          "label": "Sind Sie Schülerin/Schüler, Studentin/Student oder Auszubildende/Auszubildender?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie sich in einer Ausbildung befinden",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-29", "HA-30", "HA-31"],
+              "follow_up": "Bitte fügen Sie Nachweise bei und beantworten Sie die folgenden Fragen"
+            },
+            "on_nein": {
+              "section_jump": "HA-34",
+              "follow_up": "Weiter mit Frage 34"
+            }
+          },
+          "legal_reference": "Hinweis 6 Schule/Studium/Ausbildung",
+          "context": "Beeinflusst Ihre Ansprüche und zusätzliche Förderungen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 29,
+          "field_id": "HA-29",
+          "label": "Fallen Kosten für Schulbücher/Arbeitshefte an?",
+          "type": "radio",
+          "required": false,
+          "helper": "Geben Sie an, ob Ihnen Kosten für Lernmaterialien entstehen",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte fügen Sie Nachweise bei"
+            }
+          },
+          "legal_reference": "Hinweis 7 Schulbücher/Arbeitshefte",
+          "context": "Kann als zusätzlicher Bedarf berücksichtigt werden",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 30,
+          "field_id": "HA-30",
+          "label": "Sind Sie während der Ausbildung untergebracht?",
+          "type": "radio",
+          "required": false,
+          "helper": "Dies bedeutet: Sie wohnen in einem Wohnheim, einem Internat, einer Kaserne oder einer besonderen Einrichtung für Menschen mit Behinderung. Oder Sie wohnen bei der Ausbilderin/dem Ausbilder mit voller Verpflegung oder in einer Wohnung mit Kostenerstattung für Unterkunft und Verpflegung",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte fügen Sie Nachweise bei"
+            }
+          },
+          "context": "Beeinflusst die Berechnung Ihrer Unterkunftskosten",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 31,
+          "field_id": "HA-31",
+          "label": "Sind Sie unter 18 Jahre alt oder zwischen 18 und 24 Jahre alt?",
+          "type": "radio",
+          "required": false,
+          "helper": "Für junge Menschen gelten besondere Regelungen",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-32"],
+              "follow_up": "Beantworten Sie bitte die nächsten Fragen"
+            },
+            "on_nein": {
+              "section_jump": "HA-34",
+              "follow_up": "Weiter mit Frage 34"
+            }
+          },
+          "context": "Bestimmt zusätzliche Unterstützungsmöglichkeiten für junge Menschen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 32,
+          "field_id": "HA-32",
+          "label": "Lebt ein Elternteil außerhalb der Bedarfsgemeinschaft?",
+          "type": "radio",
+          "required": false,
+          "helper": "Geben Sie an, ob ein Elternteil nicht in Ihrem Haushalt lebt",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-33"],
+              "follow_up": "Beantworten Sie bitte Frage 33"
+            },
+            "on_nein": {
+              "section_jump": "HA-34",
+              "follow_up": "Weiter mit Frage 34"
+            }
+          },
+          "legal_reference": "Hinweis 8 Bedarfsgemeinschaft",
+          "context": "Wichtig für Unterhaltszahlungen und Bedarfsberechnung",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 33,
+          "field_id": "HA-33",
+          "label": "Machen Sie eine Schul- oder Berufsausbildung oder werden eine beginnen?",
+          "type": "radio",
+          "required": false,
+          "helper": "Geben Sie an, ob Sie eine Ausbildung machen oder planen",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte füllen Sie auch die Anlage UH3 aus"
+            }
+          },
+          "context": "Bestimmt zusätzliche Förderungen für Auszubildende",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 34,
+          "field_id": "HA-34",
+          "label": "Sind Sie Berechtigte/Berechtigter nach dem Asylbewerberleistungsgesetz?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie bereits Asylbewerberleistungen erhalten",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-35", "HA-36", "HA-37"],
+              "follow_up": "Bitte fügen Sie den Bewilligungsbescheid bei und geben Sie weitere Informationen an"
+            }
+          },
+          "legal_reference": "Hinweis 9 Berechtigte nach dem Asylbewerberleistungsgesetz",
+          "context": "Kann die Art der Leistungen beeinflussen, die Sie erhalten",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 35,
+          "field_id": "HA-35",
+          "label": "Bis wann erhalten Sie Asylbewerberleistungen?",
+          "type": "date",
+          "required": false,
+          "helper": "Geben Sie das Enddatum Ihrer Asylbewerberleistungen an",
+          "examples": "31.12.2025",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Bestimmt den Übergang zu Bürgergeld",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 36,
+          "field_id": "HA-36",
+          "label": "Personenidentifikationsnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Falls vorhanden, geben Sie Ihre Personenidentifikationsnummer an",
+          "examples": "12345678901",
+          "validation": {
+            "pattern": "^[0-9]{11}$",
+            "hint": "11-stellige Nummer"
+          },
+          "context": "Eindeutige Identifikation im deutschen System",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 37,
+          "field_id": "HA-37",
+          "label": "Ausländerzentralregisternummer",
+          "type": "text",
+          "required": false,
+          "helper": "Falls vorhanden, geben Sie Ihre AZR-Nummer an",
+          "examples": "A123456789",
+          "validation": {
+            "pattern": "^[A-Z][0-9]{9}$",
+            "hint": "Ein Buchstabe gefolgt von 9 Ziffern"
+          },
+          "context": "Registrierung im Ausländerzentralregister",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 38,
+          "field_id": "HA-38",
+          "label": "Haben Sie innerhalb der letzten drei Jahre bereits Bürgergeld oder Sozialhilfe beantragt oder bezogen?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie bereits Sozialleistungen erhalten haben",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-39", "HA-40", "HA-41", "HA-42", "HA-43", "HA-44", "HA-45"],
+              "follow_up": "Bitte geben Sie Details zu den erhaltenen Leistungen an"
+            }
+          },
+          "context": "Wichtig für die Bearbeitung Ihres Antrags und Vermeidung von Doppelzahlungen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 39,
+          "field_id": "HA-39",
+          "label": "Bitte geben Sie die Art der Leistung an",
+          "type": "text",
+          "required": false,
+          "helper": "Beschreiben Sie, welche Leistungen Sie erhalten haben",
+          "examples": "Bürgergeld, Sozialhilfe",
+          "context": "Art der vorherigen Sozialleistungen",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 40,
+          "field_id": "HA-40",
+          "label": "Bitte geben Sie den Zeitraum an, in dem Sie Leistungen erhalten haben",
+          "type": "date_range",
+          "required": false,
+          "helper": "Zeitraum der Leistungen von/bis",
+          "examples": {
+            "from": "01.01.2022",
+            "to": "31.12.2022"
+          },
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Dauer der vorherigen Leistungen",
+          "ui_hint": "date_range_picker"
+        },
+        {
+          "field_number": 41,
+          "field_id": "HA-41",
+          "label": "Name des Leistungsträgers",
+          "type": "text",
+          "required": false,
+          "helper": "Name der Behörde, die die Leistungen gewährt hat",
+          "examples": "Jobcenter Berlin Mitte",
+          "context": "Zuständiger Leistungsträger",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 42,
+          "field_id": "HA-42",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße des Leistungsträgers",
+          "examples": "Behördenstraße",
+          "context": "Anschrift des Leistungsträgers",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 43,
+          "field_id": "HA-43",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer des Leistungsträgers",
+          "examples": "1",
+          "context": "Anschrift des Leistungsträgers",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 44,
+          "field_id": "HA-44",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl des Leistungsträgers",
+          "examples": "10115",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift des Leistungsträgers",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 45,
+          "field_id": "HA-45",
+          "label": "Ort",
+          "type": "text",
+          "required": false,
+          "helper": "Ort des Leistungsträgers",
+          "examples": "Berlin",
+          "context": "Anschrift des Leistungsträgers",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 46,
+          "field_id": "HA-46",
+          "label": "Waren Sie bei einer Arbeitgeberin/einem Arbeitgeber angestellt beziehungsweise beschäftigt?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, welche der nachfolgenden Aussagen für Sie innerhalb der letzten fünf Jahre zutreffen und fügen Sie Nachweise bei",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-47", "HA-48"],
+              "follow_up": "Bitte geben Sie Details zu Ihren Beschäftigungen an"
+            },
+            "on_nein": {
+              "section_jump": "HA-54",
+              "follow_up": "Weiter mit Frage 54"
+            }
+          },
+          "context": "Arbeitsverhältnisse der letzten 5 Jahre",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 47,
+          "field_id": "HA-47",
+          "label": "Bitte geben Sie den Zeitraum der Beschäftigungen an",
+          "type": "date_range_multiple",
+          "required": false,
+          "helper": "Zeiträume Ihrer Beschäftigungen",
+          "examples": [
+            {
+              "from": "01.01.2020",
+              "to": "31.12.2021"
+            },
+            {
+              "from": "01.06.2022",
+              "to": "30.11.2023"
+            }
+          ],
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Zeiträume der Beschäftigungen",
+          "ui_hint": "date_range_multiple"
+        },
+        {
+          "field_number": 48,
+          "field_id": "HA-48",
+          "label": "Haben Sie ausstehende Lohnansprüche gegen eine (ehemalige) Arbeitgeberin/einen (ehemaligen) Arbeitgeber?",
+          "type": "radio",
+          "required": false,
+          "helper": "Geben Sie an, ob Ihnen noch Lohn zusteht",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-49", "HA-50", "HA-51", "HA-52", "HA-53"],
+              "follow_up": "Bitte geben Sie Name und Anschrift der Arbeitgeberin/des Arbeitgebers an"
+            },
+            "on_nein": {
+              "section_jump": "HA-54",
+              "follow_up": "Weiter mit Frage 54"
+            }
+          },
+          "context": "Ausstehende Lohnansprüche",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 49,
+          "field_id": "HA-49",
+          "label": "Name (ehemalige) Arbeitgeberin/(ehemaliger) Arbeitgeber",
+          "type": "text",
+          "required": false,
+          "helper": "Name des Arbeitgebers mit ausstehenden Lohnansprüchen",
+          "examples": "Musterfirma GmbH",
+          "context": "Arbeitgeber mit Lohnansprüchen",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 50,
+          "field_id": "HA-50",
+          "label": "Straße",
+          "type": "text",
+          "required": false,
+          "helper": "Straße des Arbeitgebers",
+          "examples": "Firmenstraße",
+          "context": "Anschrift des Arbeitgebers",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 51,
+          "field_id": "HA-51",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": false,
+          "helper": "Hausnummer des Arbeitgebers",
+          "examples": "10",
+          "context": "Anschrift des Arbeitgebers",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 52,
+          "field_id": "HA-52",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": false,
+          "helper": "Postleitzahl des Arbeitgebers",
+          "examples": "12345",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "5-stellige Postleitzahl"
+          },
+          "context": "Anschrift des Arbeitgebers",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 53,
+          "field_id": "HA-53",
+          "label": "Ort",
+          "type": "text",
+          "required": false,
+          "helper": "Ort des Arbeitgebers",
+          "examples": "Musterstadt",
+          "context": "Anschrift des Arbeitgebers",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 54,
+          "field_id": "HA-54",
+          "label": "Waren Sie selbständig/freiberuflich tätig?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie selbständig oder freiberuflich gearbeitet haben",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "context": "Selbständige Tätigkeit in den letzten 5 Jahren",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 55,
+          "field_id": "HA-55",
+          "label": "Haben Sie Entgeltersatzleistungen erhalten?",
+          "type": "radio",
+          "required": true,
+          "helper": "Zum Beispiel Krankengeld, Arbeitslosengeld, Übergangsgeld, Elterngeld",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-56", "HA-57"],
+              "follow_up": "Bitte geben Sie Art und Zeitraum der Leistungen an"
+            },
+            "on_nein": {
+              "section_jump": "HA-58",
+              "follow_up": "Weiter mit Frage 58"
+            }
+          },
+          "context": "Entgeltersatzleistungen der letzten 5 Jahre",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 56,
+          "field_id": "HA-56",
+          "label": "Bitte geben Sie die Entgeltersatzleistung an",
+          "type": "text",
+          "required": false,
+          "helper": "Art der erhaltenen Entgeltersatzleistung",
+          "examples": "Krankengeld, Arbeitslosengeld",
+          "context": "Art der Entgeltersatzleistung",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 57,
+          "field_id": "HA-57",
+          "label": "Bitte geben Sie den Zeitraum an, in dem Sie die Entgeltersatzleistung erhalten haben",
+          "type": "date_range",
+          "required": false,
+          "helper": "Zeitraum der Entgeltersatzleistung von/bis",
+          "examples": {
+            "from": "01.01.2023",
+            "to": "31.03.2023"
+          },
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Dauer der Entgeltersatzleistung",
+          "ui_hint": "date_range_picker"
+        },
+        {
+          "field_number": 58,
+          "field_id": "HA-58",
+          "label": "Haben Sie Wehrdienst oder einen freiwilligen Dienst geleistet?",
+          "type": "radio",
+          "required": true,
+          "helper": "Zum Beispiel Freiwilliges Soziales Jahr, Bundesfreiwilligendienst",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "context": "Wehr- oder Freiwilligendienst",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 59,
+          "field_id": "HA-59",
+          "label": "Haben Sie Angehörige gepflegt (Pflege nach dem Elften Buch Sozialgesetzbuch)?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie Angehörige gepflegt haben",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "context": "Pflegetätigkeit nach SGB XI",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 60,
+          "field_id": "HA-60",
+          "label": "Wenn keine der obigen Aussagen innerhalb der letzten 5 Jahre auf Sie zutrifft, geben Sie bitte an, wie Sie Ihren Lebensunterhalt bestritten haben",
+          "type": "textarea",
+          "required": false,
+          "helper": "Zum Beispiel finanzielle Unterstützung durch Verwandte/Bekannte, Ersparnisse, Erbschaft",
+          "examples": "Finanzielle Unterstützung durch Familie, Ersparnisse aus vorheriger Tätigkeit",
+          "context": "Alternative Finanzierung des Lebensunterhalts",
+          "ui_hint": "textarea_medium"
+        },
+        {
+          "field_number": 61,
+          "field_id": "HA-61",
+          "label": "Haben Sie schon andere Leistungen beantragt oder beabsichtigen Sie, Leistungen zu beantragen?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie andere Leistungen beantragt haben",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-62"],
+              "follow_up": "Bitte geben Sie an, welche Leistungen Sie beantragt haben oder beantragen möchten"
+            },
+            "on_nein": {
+              "section_jump": "HA-63",
+              "follow_up": "Weiter mit Frage 63"
+            }
+          },
+          "context": "Andere beantragte Leistungen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 62,
+          "field_id": "HA-62",
+          "label": "Bitte geben Sie an, welche Leistungen Sie beantragt haben oder beantragen möchten",
+          "type": "checkbox",
+          "required": false,
+          "helper": "Bitte fügen Sie soweit möglich Nachweise bei",
+          "options": [
+            {
+              "value": "bafoeg",
+              "label": "BAföG (Leistungen nach dem Bundesausbildungsförderungsgesetz)"
+            },
+            {
+              "value": "bab",
+              "label": "BAB (Berufsausbildungsbeihilfe)"
+            },
+            {
+              "value": "wohngeld",
+              "label": "Wohngeld"
+            },
+            {
+              "value": "arbeitslosengeld",
+              "label": "Arbeitslosengeld"
+            },
+            {
+              "value": "rente",
+              "label": "Rente"
+            },
+            {
+              "value": "krankengeld",
+              "label": "Krankengeld"
+            },
+            {
+              "value": "kindergeld",
+              "label": "Kindergeld"
+            },
+            {
+              "value": "kinderzuschlag",
+              "label": "Kinderzuschlag"
+            },
+            {
+              "value": "sonstiges",
+              "label": "Sonstiges"
+            }
+          ],
+          "context": "Arten der beantragten Leistungen",
+          "ui_hint": "checkbox_vertical"
+        },
+        {
+          "field_number": 63,
+          "field_id": "HA-63",
+          "label": "Haben Sie einen gesundheitlichen Schaden durch einen Dritten erlitten?",
+          "type": "radio",
+          "required": true,
+          "helper": "Zum Beispiel Arbeits-, Verkehrs-, Spiel- oder Sportunfall, ärztlicher Behandlungsfehler oder tätliche Auseinandersetzung) und müssen deshalb Leistungen beim Jobcenter beantragen",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte füllen Sie auch die Anlage UF aus"
+            }
+          },
+          "context": "Schäden durch Dritte",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 64,
+          "field_id": "HA-64",
+          "label": "Haben Sie einen Anspruch gegenüber Dritten?",
+          "type": "radio",
+          "required": true,
+          "helper": "Zum Beispiel Schadensersatz, Erbschaft",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte fügen Sie einen Nachweis über den Anspruch bei"
+            }
+          },
+          "legal_reference": "Hinweis 10 Ansprüche gegenüber Dritten",
+          "context": "Ansprüche gegenüber Dritten",
+          "ui_hint": "radio_inline"
+        }
+      ]
+    },
+    "D": {
+      "title": "Besondere Lebenssituation",
+      "fields": [
+        {
+          "field_number": 65,
+          "field_id": "HA-65",
+          "label": "Sind Sie alleinerziehend?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie allein für mindestens ein Kind unter 18 Jahren sorgen",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "context": "Alleinerziehende erhalten einen Mehrbedarf",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 66,
+          "field_id": "HA-66",
+          "label": "Sind Sie schwanger?",
+          "type": "radio",
+          "required": true,
+          "helper": "Schwangere erhalten einen Mehrbedarf ab der 13. Schwangerschaftswoche",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-67"],
+              "follow_up": "Bitte geben Sie den voraussichtlichen Entbindungstermin an"
+            },
+            "on_nein": {
+              "section_jump": "HA-68",
+              "follow_up": "Weiter mit Frage 68"
+            }
+          },
+          "legal_reference": "Hinweis 11 Mehrbedarf für Schwangere",
+          "context": "Bestimmt zusätzliche finanzielle Unterstützung während der Schwangerschaft",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 67,
+          "field_id": "HA-67",
+          "label": "Wann ist der voraussichtliche Entbindungstermin?",
+          "type": "date",
+          "required": false,
+          "helper": "Geben Sie das voraussichtliche Datum der Entbindung an. Falls Sie nicht verheiratet sind, füllen Sie bitte auch die Anlage UH2 aus",
+          "examples": "15.06.2025",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Benötigt für die Berechnung des Mehrbedarfs",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 68,
+          "field_id": "HA-68",
+          "label": "Benötigen Sie aus medizinischen Gründen eine kostenaufwändige Ernährung?",
+          "type": "radio",
+          "required": true,
+          "helper": "Bestimmte Krankheiten erfordern eine spezielle, teurere Ernährung",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte füllen Sie auch die Anlage MEB aus"
+            }
+          },
+          "legal_reference": "Hinweis 12 Mehrbedarf für kostenaufwändige Ernährung",
+          "context": "Kann zu einem Mehrbedarf berechtigen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 69,
+          "field_id": "HA-69",
+          "label": "Haben Sie eine Behinderung?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob bei Ihnen eine Behinderung festgestellt wurde",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-70"],
+              "follow_up": "Bitte beantworten Sie Frage 70"
+            },
+            "on_nein": {
+              "section_jump": "HA-71",
+              "follow_up": "Weiter mit Frage 71"
+            }
+          },
+          "context": "Menschen mit Behinderung haben Anspruch auf besondere Unterstützung",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 70,
+          "field_id": "HA-70",
+          "label": "Erhalten Sie Leistungen zur Teilhabe am Arbeitsleben oder Eingliederungshilfen?",
+          "type": "radio",
+          "required": false,
+          "helper": "Bestimmte Leistungen nach SGB IX unterstützen Menschen mit Behinderung",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte fügen Sie den Bescheid bei"
+            }
+          },
+          "legal_reference": "§ 49 SGB IX, § 112 SGB IX",
+          "context": "Kann zusätzliche Unterstützung bei der Arbeitssuche bedeuten",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 71,
+          "field_id": "HA-71",
+          "label": "Haben Sie einen unabweisbaren besonderen Bedarf?",
+          "type": "radio",
+          "required": true,
+          "helper": "Zum Beispiel Kosten zur Wahrnehmung des Umgangsrechts bei getrenntlebenden Eltern, den Sie nicht durch Einsparungen oder auf andere Weise abdecken können",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte füllen Sie auch die Anlage BB aus"
+            }
+          },
+          "legal_reference": "Hinweis 13 Unabweisbarer besonderer Bedarf",
+          "context": "Besondere nicht vermeidbare Kosten",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 72,
+          "field_id": "HA-72",
+          "label": "Befinden Sie sich derzeit oder demnächst in einer stationären Einrichtung?",
+          "type": "radio",
+          "required": true,
+          "helper": "Zum Beispiel Krankenhaus, Altenheim, Justizvollzugsanstalt",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-73", "HA-74"],
+              "follow_up": "Bitte geben Sie Art und Dauer des Aufenthaltes an"
+            },
+            "on_nein": {
+              "section_jump": "E",
+              "follow_up": "Weiter mit Abschnitt E"
+            }
+          },
+          "legal_reference": "Hinweis 14 Stationäre Einrichtung",
+          "context": "Stationäre Aufenthalte beeinflussen Leistungsansprüche",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 73,
+          "field_id": "HA-73",
+          "label": "Bitte geben Sie die Art der stationären Einrichtung an",
+          "type": "text",
+          "required": false,
+          "helper": "Art der Einrichtung",
+          "examples": "Krankenhaus, Altenheim, Justizvollzugsanstalt",
+          "context": "Art der stationären Einrichtung",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 74,
+          "field_id": "HA-74",
+          "label": "Bitte geben Sie die (voraussichtliche) Dauer des Aufenthaltes an",
+          "type": "date_range",
+          "required": false,
+          "helper": "Zeitraum des Aufenthaltes von/bis",
+          "examples": {
+            "from": "01.01.2025",
+            "to": "31.03.2025"
+          },
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Dauer des stationären Aufenthaltes",
+          "ui_hint": "date_range_picker"
+        }
+      ]
+    },
+    "E": {
+      "title": "Kranken- und Pflegeversicherung",
+      "fields": [
+        {
+          "field_number": 75,
+          "field_id": "HA-75",
+          "label": "Sind Sie in der gesetzlichen Kranken- und Pflegeversicherung versichert?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie gesetzlich kranken- und pflegeversichert sind",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["HA-76", "HA-77", "HA-78"],
+              "follow_up": "Bitte ergänzen Sie die nachfolgenden Angaben und fügen Sie bitte einen Nachweis bei"
+            },
+            "on_nein": {
+              "section_jump": "HA-79",
+              "follow_up": "Weiter mit Frage 79"
+            }
+          },
+          "legal_reference": "Hinweis 15 Kranken- und Pflegeversicherung",
+          "context": "Bestimmt Ihre Krankenversicherung während des Bürgergeldbezugs",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 76,
+          "field_id": "HA-76",
+          "label": "Name der Krankenkasse",
+          "type": "text",
+          "required": false,
+          "helper": "Geben Sie den Namen Ihrer Krankenkasse an",
+          "examples": "AOK Berlin",
+          "context": "Für die Weitermeldung an Ihre Krankenkasse",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 77,
+          "field_id": "HA-77",
+          "label": "Krankenversichertennummer (falls bekannt)",
+          "type": "text",
+          "required": false,
+          "helper": "Falls Sie Ihre Krankenversichertennummer kennen, geben Sie sie hier an",
+          "examples": "A123456789",
+          "validation": {
+            "pattern": "^[A-Z][0-9]{9}$",
+            "hint": "Ein Buchstabe gefolgt von 9 Ziffern"
+          },
+          "context": "Erleichtert die Zuordnung bei Ihrer Krankenkasse",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 78,
+          "field_id": "HA-78",
+          "label": "Möchten Sie mit Beginn des Bürgergeldbezuges die Krankenkasse wechseln?",
+          "type": "radio",
+          "required": false,
+          "helper": "Sie können beim Übergang zu Bürgergeld Ihre Krankenkasse wechseln",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte fügen Sie einen aktuellen Nachweis der Krankenkasse über die Versicherung bei"
+            }
+          },
+          "context": "Nutzen Sie die Gelegenheit für einen Krankenkassenwechsel",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 79,
+          "field_id": "HA-79",
+          "label": "Sind Sie privat versichert, freiwillig gesetzlich versichert oder nicht versichert?",
+          "type": "radio",
+          "required": false,
+          "helper": "Falls Sie nicht gesetzlich pflichtversichert sind, geben Sie Ihren Versicherungsstatus an",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte füllen Sie auch die Anlage SV aus"
+            }
+          },
+          "context": "Bestimmt Ihre Krankenversicherung während des Bürgergeldbezugs",
+          "ui_hint": "radio_inline"
+        }
+      ]
+    },
+    "F": {
+      "title": "Wohnsituation",
+      "fields": [
+        {
+          "field_number": 80,
+          "field_id": "HA-80",
+          "label": "Wohnen Sie allein?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie allein oder mit anderen Personen zusammenwohnen",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "section_jump": "HA-82",
+              "follow_up": "Weiter mit Frage 82"
+            },
+            "on_nein": {
+              "fields": ["HA-81"],
+              "follow_up": "Bitte geben Sie an, mit welchen Personen Sie zusammenwohnen"
+            }
+          },
+          "legal_reference": "Hinweis 8 Bedarfsgemeinschaft, Hinweis 16 Haushaltsgemeinschaft, Hinweis 17 Verantwortungs- und Einstehensgemeinschaft",
+          "context": "Bestimmt Ihre Bedarfsgemeinschaft und die Höhe der Leistungen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 81,
+          "field_id": "HA-81",
+          "label": "Bitte geben Sie an, mit welchen Personen Sie zusammen wohnen",
+          "type": "checkbox",
+          "required": false,
+          "helper": "Wählen Sie alle zutreffenden Personengruppen aus, mit denen Sie zusammenwohnen",
+          "options": [
+            {
+              "value": "ehegatte",
+              "label": "Ehegattin/Ehegatte, eingetragene Lebenspartnerin/eingetragener Lebenspartner, Partnerin/Partner (\"eheähnliche Gemeinschaft\"). Bitte füllen Sie auch die Anlage WEP aus."
+            },
+            {
+              "value": "kinder_15_24",
+              "label": "unverheiratete Kind(er) zwischen 15 Jahren und 24 Jahren. Bitte füllen Sie für jedes Kind jeweils auch eine Anlage WEP aus."
+            },
+            {
+              "value": "kinder_unter_15",
+              "label": "Kind(er) unter 15 Jahren. Bitte füllen Sie für jedes Kind jeweils auch eine Anlage KI aus."
+            },
+            {
+              "value": "eltern",
+              "label": "Eltern oder einem Elternteil. Sind Sie als Antragstellerin/Antragsteller unter 25 Jahre alt, füllen Sie bitte für jeden Elternteil jeweils auch eine Anlage WEP aus. Sind Sie 25 Jahre oder älter, füllen Sie bitte für jeden Elternteil jeweils auch eine Anlage HG aus."
+            },
+            {
+              "value": "verwandte",
+              "label": "sonstige Verwandte oder Verschwägerte (zum Beispiel Großeltern, Geschwister über 25 Jahre, verheiratete Kinder, Tanten oder Onkel). Bitte füllen Sie für jeden Verwandten/Verschwägerten jeweils auch die Anlage HG aus."
+            },
+            {
+              "value": "sonstige",
+              "label": "sonstige Personen (zum Beispiel andere Personen in einer Wohngemeinschaft). Gegebenenfalls prüft das Jobcenter eine Verantwortungs- und Einstehensgemeinschaft. Ihr Jobcenter wird Sie gegebenenfalls bitten, die Anlage VE auszufüllen."
+            }
+          ],
+          "context": "Verschiedene Personen bilden unterschiedliche Gemeinschaften mit verschiedenen Rechten und Pflichten",
+          "ui_hint": "checkbox_vertical"
+        },
+        {
+          "field_number": 82,
+          "field_id": "HA-82",
+          "label": "Entstehen Ihnen Bedarfe für Unterkunft und Heizung?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie Miete, Nebenkosten oder Heizkosten zahlen müssen",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte füllen Sie auch die Anlage KDU aus"
+            }
+          },
+          "context": "Unterkunfts- und Heizkosten werden in angemessener Höhe übernommen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 83,
+          "field_id": "HA-83",
+          "label": "Wird Ihr Warmwasser dezentral erzeugt?",
+          "type": "radio",
+          "required": true,
+          "helper": "Zum Beispiel mit einem Durchlauferhitzer/Boiler",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "legal_reference": "Hinweis 18 Mehrbedarf für die dezentrale Warmwassererzeugung",
+          "context": "Berechtigt zu einem Mehrbedarf für höhere Stromkosten",
+          "ui_hint": "radio_inline"
+        }
+      ]
+    },
+    "G": {
+      "title": "Erforderliche Anlagen zur Prüfung Ihres Antrages auf Bürgergeld",
+      "fields": [
+        {
+          "field_number": null,
+          "field_id": "HA-G1",
+          "label": "Selbstauskunft Vermögen (Anlage VM)",
+          "type": "checkbox",
+          "required": true,
+          "helper": "Dieses Formular füllen Sie einmal für Ihre gesamte Bedarfsgemeinschaft aus",
+          "legal_reference": "Hinweis 19 Vermögen",
+          "context": "Zur Prüfung Ihres Vermögens und Ihrer Anspruchsberechtigung",
+          "ui_hint": "checkbox_required"
+        },
+        {
+          "field_number": null,
+          "field_id": "HA-G2",
+          "label": "Kontoauszüge",
+          "type": "checkbox",
+          "required": true,
+          "helper": "Bei einer Antragstellung ist grundsätzlich die Vorlage von Kontoauszügen der letzten drei Monate erforderlich. Bitte achten Sie darauf, dass die Kontoauszüge aller vorhandenen Konten von allen Personen der Bedarfsgemeinschaft vollständig und lückenlos vorgelegt werden",
+          "legal_reference": "Hinweis 20 Kontoauszüge",
+          "context": "Zur Überprüfung Ihrer Einkommens- und Vermögensverhältnisse",
+          "ui_hint": "checkbox_required"
+        },
+        {
+          "field_number": null,
+          "field_id": "HA-G3",
+          "label": "Anlage EK",
+          "type": "checkbox",
+          "required": true,
+          "helper": "Dieses Formular füllen Sie jeweils für jede Person in der Bedarfsgemeinschaft aus",
+          "legal_reference": "Hinweis 21 Einkommen",
+          "context": "Zur Erfassung aller Einkommen in Ihrer Bedarfsgemeinschaft",
+          "ui_hint": "checkbox_required"
+        },
+        {
+          "field_number": null,
+          "field_id": "HA-G4",
+          "label": "Anlage EKS",
+          "type": "checkbox",
+          "required": false,
+          "helper": "Dieses Formular wird zusätzlich für diejenige Person in der Bedarfsgemeinschaft benötigt, die eine selbständige oder freiberufliche Tätigkeit ausübt",
+          "context": "Zusätzlich erforderlich bei selbständiger Tätigkeit",
+          "ui_hint": "checkbox_conditional"
+        },
+        {
+          "field_number": null,
+          "field_id": "HA-G5",
+          "label": "Anlagen aus den Abschnitten A bis F",
+          "type": "checkbox",
+          "required": false,
+          "helper": "Soweit diese je nach Lebenssituation erforderlich sind",
+          "context": "Situationsabhängige Zusatzformulare",
+          "ui_hint": "checkbox_conditional"
+        }
+      ]
+    },
+    "H": {
+      "title": "Hinweise und Unterschrift",
+      "fields": [
+        {
+          "field_number": 84,
+          "field_id": "HA-84",
+          "label": "Datum",
+          "type": "date",
+          "required": true,
+          "helper": "Geben Sie das heutige Datum ein",
+          "examples": "11.09.2025",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Datum der Antragstellung",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 85,
+          "field_id": "HA-85",
+          "label": "Unterschrift antragstellende Person",
+          "type": "signature",
+          "required": true,
+          "helper": "Ihre rechtsverbindliche Unterschrift. Bei Minderjährigen: Unterschrift erziehungs- oder sorgeberechtigte Person",
+          "context": "Bestätigt die Richtigkeit Ihrer Angaben und Ihre Kenntnisnahme der Pflichten",
+          "ui_hint": "signature_pad"
+        },
+        {
+          "field_number": 86,
+          "field_id": "HA-86",
+          "label": "Datum",
+          "type": "date",
+          "required": false,
+          "helper": "Nur ausfüllen, falls Sie einen Betreuer/Vormund haben",
+          "context": "Datum der Unterschrift des Betreuers/Vormunds",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 87,
+          "field_id": "HA-87",
+          "label": "Unterschrift Betreuerin/Betreuer/Vormund",
+          "type": "signature",
+          "required": false,
+          "helper": "Nur erforderlich, falls Sie unter rechtlicher Betreuung stehen",
+          "context": "Rechtliche Vertretung bei eingeschränkter Geschäftsfähigkeit",
+          "ui_hint": "signature_pad"
+        }
+      ]
+    }
+  },
+  "form_info": {
+    "note": "Der Antrag auf Bürgergeld nach dem SGB II besteht aus dem Hauptantrag und verschiedenen Anlagen.",
+    "online_alternative": "Oder Sie nutzen den Online-Bürgergeldantrag unter: www.jobcenter.digital/buergergeld",
+    "document_submission": "Bitte reichen Sie grundsätzlich keine Originalbelege, sondern Nachweise nur in Kopie ein.",
+    "legal_confirmation": "Ich bestätige, dass die Angaben richtig sind. Ich habe das \"Merkblatt Bürgergeld – Grundsicherung für Arbeitsuchende – SGB II\" und die Ausfüllhinweise erhalten und bestätige, deren Inhalt zu kennen."
+  }
+}

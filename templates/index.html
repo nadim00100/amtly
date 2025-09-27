@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amtly - AI German Bureaucracy Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <meta name="description" content="AI-powered assistant for German bureaucracy with RAG and OCR">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <h2>Amtly</h2>
+                    <span class="logo-subtitle">AI Bureaucracy Assistant</span>
+                </div>
+                <button id="new-chat-btn" class="new-chat-btn">
+                    <span class="btn-icon">+</span>
+                    <span class="btn-text">New Chat</span>
+                </button>
+            </div>
+
+            <div class="sidebar-content">
+                <div id="chat-list" class="chat-list">
+                    <!-- Chats will be loaded here -->
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="tech-badges">
+                    <span class="badge">RAG</span>
+                    <span class="badge">OCR</span>
+                    <span class="badge">AI</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Sidebar Toggle -->
+        <button id="sidebar-toggle" class="sidebar-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <!-- Main Chat Area -->
+        <div class="main-content">
+            <div class="chat-container">
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="header-content">
+                        <h1 id="chat-title">Welcome to Amtly</h1>
+                        <p id="chat-subtitle">AI German Bureaucracy Assistant</p>
+                    </div>
+                </div>
+
+                <!-- Messages Area -->
+                <div id="chat-messages" class="chat-messages">
+                    <div class="message bot-message" id="welcome-message">
+                        <div class="message-content">
+                            <p><strong>🤖 Welcome to Amtly!</strong></p>
+                            <p>I'm your AI assistant for German bureaucracy, powered by advanced AI technologies:</p>
+                            <ul>
+                                <li>📚 <strong>RAG System:</strong> Search official documents with vector embeddings</li>
+                                <li>📄 <strong>OCR Processing:</strong> Upload PDFs or photos for text extraction</li>
+                                <li>📋 <strong>Form Intelligence:</strong> Get help with specific forms and sections</li>
+                                <li>✉️ <strong>German Emails:</strong> All emails to German offices automatically in German</li>
+                                <li>🤖 <strong>Smart Commands:</strong> I do exactly what you ask - explain, translate, or both!</li>
+                                <li>💾 <strong>Persistent Chats:</strong> Your conversations are saved and organized!</li>
+                            </ul>
+                            <p><strong>Try these examples:</strong></p>
+                            <div class="example-prompts">
+                                <button class="example-btn" data-example="Was ist Bürgergeld?">📚 "Was ist Bürgergeld?"</button>
+                                <button class="example-btn" data-example="Help me with WBA form">📝 "Help me with WBA form"</button>
+                                <button class="example-btn" data-example="WBA form section B">🎯 "WBA form section B"</button>
+                                <button class="example-btn" data-example="Explain this document">📄 "Explain this document"</button>
+                                <button class="example-btn" data-example="Write an email to Jobcenter about my application">✉️ "Email to Jobcenter (auto-DE)"</button>
+                                <button class="example-btn" data-example="Schreibe eine E-Mail an das Sozialamt">📧 "E-Mail an Sozialamt"</button>
+                            </div>
+                        </div>
+                        <div class="message-meta">
+                            <span class="message-time">Just now</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="chat-input-container">
+                    <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg" style="display: none;">
+                    <button id="file-button" class="file-button" title="Upload Document (PDF/Image)">
+                        📎 <span class="button-text">Upload</span>
+                    </button>
+                    <button id="clear-button" class="clear-button" title="Clear Session">
+                        🗑️ <span class="button-text">Clear</span>
+                    </button>
+                    <input type="text" id="user-input" placeholder="Write emails to German offices, explain/translate docs, ask about bureaucracy..." maxlength="1000" />
+                    <button id="send-button" title="Send Message">
+                        <span class="button-text">Send</span>
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div id="loading" class="loading hidden">
+                    <div class="loading-spinner"></div>
+                    <p id="loading-text">Amtly AI is processing...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Overlay for Mobile -->
+        <div id="sidebar-overlay" class="sidebar-overlay"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+    <script>
+        // Set timestamp for welcome message after page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const welcomeMessage = document.getElementById('welcome-message');
+            if (welcomeMessage) {
+                welcomeMessage.setAttribute('data-timestamp', new Date().toISOString());
+            }
+        });
+    </script>
+</body>
+</html>

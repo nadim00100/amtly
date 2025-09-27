@@ -1,0 +1,40 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+
+# IDE configs
+.vscode/
+.idea/
+*.swp
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Local database
+data/amtly.db
+
+# Knowledge base and uploads (runtime data)
+data/knowledge_base/chunks/
+data/knowledge_base/documents/
+data/knowledge_base/embeddings/
+data/knowledge_base/ingestion_progress.json
+data/uploads/temp/
+
+# Logs
+*.log
+
+# Node modules if frontend expands
+node_modules/
+
+# Build / dist artifacts
+dist/
+build/

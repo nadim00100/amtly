@@ -1,0 +1,843 @@
+{
+  "form_name": "Weiterbewilligungsantrag WBA",
+  "description": "Antrag auf Weiterbewilligung des Bürgergeldes nach dem Zweiten Buch Sozialgesetzbuch (SGB II)",
+  "sections": {
+    "A": {
+      "title": "Persönliche Daten der antragstellenden Person",
+      "fields": [
+        {
+          "field_number": 1,
+          "field_id": "WBA-01",
+          "label": "Vorname",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihren Vornamen ein",
+          "examples": "Maria",
+          "validation": {
+            "pattern": "^[a-zA-ZäöüÄÖÜß\\s-]+$",
+            "hint": "Nur Buchstaben, Leerzeichen und Bindestriche erlaubt"
+          },
+          "context": "Ihr Vorname wird für die Identifikation benötigt",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 2,
+          "field_id": "WBA-02",
+          "label": "Nachname",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihren Nachnamen ein",
+          "examples": "Müller",
+          "validation": {
+            "pattern": "^[a-zA-ZäöüÄÖÜß\\s-]+$",
+            "hint": "Nur Buchstaben, Leerzeichen und Bindestriche erlaubt"
+          },
+          "context": "Ihr Nachname wird für die Identifikation benötigt",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 3,
+          "field_id": "WBA-03",
+          "label": "Geburtsdatum (TT.MM.JJJJ)",
+          "type": "date",
+          "required": true,
+          "helper": "Geben Sie Ihr Geburtsdatum im Format TT.MM.JJJJ ein",
+          "examples": "15.03.1985",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Ihr Geburtsdatum für die eindeutige Zuordnung",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 4,
+          "field_id": "WBA-04",
+          "label": "Nummer der Bedarfsgemeinschaft",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihre Bedarfsgemeinschaftsnummer ein",
+          "examples": "12345678",
+          "validation": {
+            "pattern": "^[0-9]{8}$",
+            "hint": "8-stellige Nummer"
+          },
+          "context": "Zur eindeutigen Zuordnung Ihrer Bedarfsgemeinschaft",
+          "ui_hint": "input_medium"
+        }
+      ]
+    },
+    "B": {
+      "title": "Angaben zur Wohnsituation",
+      "fields": [
+        {
+          "field_number": 5,
+          "field_id": "WBA-05",
+          "label": "Straße",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihre aktuelle Straße an",
+          "examples": "Musterstraße",
+          "context": "Ihre aktuelle Anschrift",
+          "ui_hint": "input_large"
+        },
+        {
+          "field_number": 6,
+          "field_id": "WBA-06",
+          "label": "Hausnummer",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihre Hausnummer ein",
+          "examples": "42a",
+          "validation": {
+            "pattern": "^[0-9]+[a-zA-Z]?$",
+            "hint": "Zahlen und optional ein Buchstabe"
+          },
+          "context": "Ihre Hausnummer",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 7,
+          "field_id": "WBA-07",
+          "label": "Postleitzahl",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihre fünfstellige Postleitzahl ein",
+          "examples": "10115",
+          "validation": {
+            "pattern": "^[0-9]{5}$",
+            "hint": "Genau 5 Ziffern"
+          },
+          "context": "Ihre Postleitzahl",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 8,
+          "field_id": "WBA-08",
+          "label": "Wohnort",
+          "type": "text",
+          "required": true,
+          "helper": "Geben Sie Ihren Wohnort ein",
+          "examples": "Berlin",
+          "context": "Ihr Wohnort",
+          "ui_hint": "input_medium"
+        },
+        {
+          "field_number": 9,
+          "field_id": "WBA-09",
+          "label": "Wohnen Sie allein?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie allein oder mit anderen Personen zusammenwohnen",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "section_jump": "WBA-11",
+              "follow_up": "Weiter mit Frage 11"
+            },
+            "on_nein": {
+              "fields": ["WBA-10"],
+              "follow_up": "Bitte geben Sie an, mit welchen Personen Sie zusammenwohnen"
+            }
+          },
+          "legal_reference": "Hinweis 8 Bedarfsgemeinschaft, Hinweis 16 Haushaltsgemeinschaft, Hinweis 17 Verantwortungs- und Einstehensgemeinschaft",
+          "context": "Bestimmt Ihre Bedarfsgemeinschaft",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 10,
+          "field_id": "WBA-10",
+          "label": "Bitte geben Sie an, mit welchen Personen Sie zusammenwohnen",
+          "type": "table",
+          "required": false,
+          "helper": "Tragen Sie alle Personen ein, mit denen Sie zusammenwohnen",
+          "table_columns": [
+            {
+              "label": "Vorname",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Nachname",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Geburtsdatum (TT.MM.JJJJ)",
+              "type": "date",
+              "required": true,
+              "validation": {
+                "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$"
+              }
+            },
+            {
+              "label": "Verwandtschaftsverhältnis",
+              "type": "text",
+              "required": true
+            }
+          ],
+          "context": "Alle Personen Ihres Haushalts für die Bedarfsberechnung",
+          "ui_hint": "table_dynamic"
+        },
+        {
+          "field_number": 11,
+          "field_id": "WBA-11",
+          "label": "Entstehen Ihnen Bedarfe für Unterkunft und Heizung?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob Sie Miete, Nebenkosten oder Heizkosten zahlen müssen",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["WBA-12"],
+              "follow_up": "Bitte beantworten Sie Frage 12"
+            },
+            "on_nein": {
+              "section_jump": "E",
+              "follow_up": "Weiter mit Abschnitt E"
+            }
+          },
+          "context": "Unterkunfts- und Heizkosten werden in angemessener Höhe übernommen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 12,
+          "field_id": "WBA-12",
+          "label": "Bitte kreuzen Sie nachfolgend an, was auf Ihre Wohnsituation zutrifft",
+          "type": "radio",
+          "required": false,
+          "helper": "Wählen Sie zwischen Miete oder Eigentum",
+          "options": [
+            {
+              "value": "miete",
+              "label": "Wohnen zur Miete oder in einem sonstigen Wohnverhältnis. Sonstige Wohnverhältnisse sind zum Beispiel Pensionen, Wohnheime, Flüchtlingsunterkünfte oder Notunterkünfte"
+            },
+            {
+              "value": "eigentum",
+              "label": "Wohnen im Eigentum"
+            }
+          ],
+          "dependencies": {
+            "on_miete": {
+              "section_jump": "C",
+              "follow_up": "Weiter mit Abschnitt C"
+            },
+            "on_eigentum": {
+              "section_jump": "D",
+              "follow_up": "Weiter mit Abschnitt D"
+            }
+          },
+          "context": "Bestimmt die Art der Unterkunftskosten",
+          "ui_hint": "radio_vertical"
+        }
+      ]
+    },
+    "C": {
+      "title": "Angaben zu den Bedarfen für Unterkunft und Heizung bei Wohnen zur Miete oder in einem sonstigen Wohnverhältnis",
+      "fields": [
+        {
+          "field_number": 13,
+          "field_id": "WBA-13",
+          "label": "Bitte kreuzen Sie nachfolgend an, welche Bedarfe für die Mietunterkunft/das sonstige Wohnverhältnis entstehen",
+          "type": "checkbox",
+          "required": false,
+          "helper": "Wählen Sie alle zutreffenden Kostenarten aus und geben Sie die monatlichen Beträge an. Bitte fügen Sie aktuelle Nachweise zu den Ihnen entstehenden Kosten bei",
+          "options": [
+            {
+              "value": "grundmiete",
+              "label": "Grundmiete (ohne Nebenkosten und Heizkosten)",
+              "input_type": "currency",
+              "input_label": "monatlich in Euro"
+            },
+            {
+              "value": "nebenkosten",
+              "label": "Nebenkosten (ohne Heizkosten)",
+              "input_type": "currency",
+              "input_label": "monatlich in Euro"
+            },
+            {
+              "value": "heizkosten",
+              "label": "Heizkosten",
+              "input_type": "currency",
+              "input_label": "monatlich in Euro"
+            },
+            {
+              "value": "pauschalmiete",
+              "label": "Pauschalmiete",
+              "input_type": "currency",
+              "input_label": "monatlich in Euro"
+            },
+            {
+              "value": "sonstige",
+              "label": "Sonstige Wohnkosten",
+              "input_type": "currency",
+              "input_label": "monatlich in Euro"
+            }
+          ],
+          "legal_reference": "Hinweis 27 Sonstige Wohnkosten",
+          "context": "Alle Ihre monatlichen Wohnkosten für die Kostenübernahme",
+          "ui_hint": "checkbox_with_input"
+        }
+      ]
+    },
+    "D": {
+      "title": "Angaben zu den Bedarfen für Unterkunft und Heizung bei Wohnen im Eigentum",
+      "fields": [
+        {
+          "field_number": 14,
+          "field_id": "WBA-14",
+          "label": "Genutzte Wohnfläche in Quadratmetern (m²)",
+          "type": "number",
+          "required": false,
+          "helper": "Geben Sie die Größe Ihrer genutzten Wohnfläche in Quadratmetern an",
+          "examples": "85",
+          "validation": {
+            "pattern": "^[0-9]+$",
+            "hint": "Nur Zahlen erlaubt"
+          },
+          "context": "Wohnflächengröße für die Angemessenheitsprüfung",
+          "ui_hint": "input_small"
+        },
+        {
+          "field_number": 15,
+          "field_id": "WBA-15",
+          "label": "Bitte kreuzen Sie nachfolgend an, welche Bedarfe für das Eigentum entstehen",
+          "type": "checkbox",
+          "required": false,
+          "helper": "Wählen Sie alle zutreffenden Kostenarten aus. Bitte fügen Sie aktuelle Nachweise zu den Ihnen entstehenden Kosten mit Angabe der jeweiligen Fälligkeit bei",
+          "options": [
+            {
+              "value": "schuldzinsen",
+              "label": "Schuldzinsen ohne Tilgungsraten"
+            },
+            {
+              "value": "nebenkosten",
+              "label": "Nebenkosten (ohne Heizkosten, zum Beispiel Grundsteuer, Wasser)"
+            },
+            {
+              "value": "heizkosten",
+              "label": "Heizkosten"
+            }
+          ],
+          "legal_reference": "Hinweis 28 Schuldzinsen",
+          "context": "Ihre Eigentumskosten für die Kostenübernahme",
+          "ui_hint": "checkbox_vertical"
+        }
+      ]
+    },
+    "E": {
+      "title": "Angaben zu den Einkommensverhältnissen der Bedarfsgemeinschaft",
+      "fields": [
+        {
+          "field_number": 16,
+          "field_id": "WBA-16",
+          "label": "Erzielen Sie oder eine Person der Bedarfsgemeinschaft Einkommen aus Erwerbstätigkeit?",
+          "type": "radio",
+          "required": true,
+          "helper": "Anzugeben sind alle Einkünfte aus haupt- und nebenberuflichen Tätigkeiten, Ausbildungsverhältnissen, Minijob und Ferienjob",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["WBA-16a"],
+              "follow_up": "Bitte füllen Sie die nachfolgende Tabelle aus und fügen Sie Verdienstabrechnungen bei"
+            },
+            "on_nein": {
+              "section_jump": "WBA-18",
+              "follow_up": "Weiter mit Frage 18"
+            }
+          },
+          "legal_reference": "Hinweis 24 Ferienjob",
+          "context": "Erfassung aller Erwerbseinkommen in der Bedarfsgemeinschaft",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": null,
+          "field_id": "WBA-16a",
+          "label": "Erwerbseinkommen Tabelle",
+          "type": "table",
+          "required": false,
+          "helper": "Tragen Sie alle Personen mit Erwerbseinkommen ein",
+          "table_columns": [
+            {
+              "label": "Name der Person",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Name der Arbeitgeberin/des Arbeitgebers",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Monatliche Höhe des Einkommens in Euro",
+              "type": "currency",
+              "required": true
+            }
+          ],
+          "context": "Details zu allen Erwerbseinkommen",
+          "ui_hint": "table_dynamic"
+        },
+        {
+          "field_number": 17,
+          "field_id": "WBA-17",
+          "label": "Haben sich die Ausgaben im Zusammenhang mit dem Arbeits- oder Ausbildungsverhältnis geändert?",
+          "type": "radio",
+          "required": false,
+          "helper": "Geben Sie an, ob sich Ihre Werbungskosten/Absetzungen geändert haben",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["WBA-17a"],
+              "follow_up": "Bitte füllen Sie die nachfolgende Tabelle aus und fügen Sie aktuelle Nachweise bei"
+            },
+            "on_nein": {
+              "section_jump": "WBA-18",
+              "follow_up": "Weiter mit Frage 18"
+            }
+          },
+          "legal_reference": "Hinweis 26 Werbungskosten/Absetzungen",
+          "context": "Änderungen bei den Werbungskosten",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": null,
+          "field_id": "WBA-17a",
+          "label": "Werbungskosten/Absetzungen Tabelle",
+          "type": "table",
+          "required": false,
+          "helper": "Tragen Sie alle Änderungen bei den Werbungskosten ein",
+          "table_columns": [
+            {
+              "label": "Name der Person",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Art der Absetzung",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Monatliche Höhe der Ausgaben in Euro",
+              "type": "currency",
+              "required": true
+            },
+            {
+              "label": "Tag der Änderung (TT.MM.JJJJ)",
+              "type": "date",
+              "required": true,
+              "validation": {
+                "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$"
+              }
+            }
+          ],
+          "context": "Details zu Änderungen bei Werbungskosten",
+          "ui_hint": "table_dynamic"
+        },
+        {
+          "field_number": 18,
+          "field_id": "WBA-18",
+          "label": "Erzielen Sie oder eine Person der Bedarfsgemeinschaft Einkommen aufgrund der Ausübung einer selbständigen oder freiberuflichen Tätigkeit, auch in der Land- und Forstwirtschaft?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob jemand selbständig oder freiberuflich tätig ist",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "follow_up": "Bitte füllen Sie auch die Anlage EKS aus"
+            }
+          },
+          "context": "Erfassung selbständiger Einkommen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 19,
+          "field_id": "WBA-19",
+          "label": "Erhalten Sie oder eine Person der Bedarfsgemeinschaft (steuerfreie) Aufwandsentschädigungen oder Aufwandspauschalen aus einer gemeinnützigen oder ehrenamtlichen Tätigkeit?",
+          "type": "radio",
+          "required": true,
+          "helper": "Geben Sie an, ob jemand Aufwandsentschädigungen erhält",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["WBA-19a"],
+              "follow_up": "Bitte füllen Sie die nachfolgende Tabelle aus und fügen Sie aktuelle Nachweise über die konkrete Tätigkeit, Art und Höhe der Leistung und den Zahlungseingang bei"
+            },
+            "on_nein": {
+              "section_jump": "WBA-20",
+              "follow_up": "Weiter mit Frage 20"
+            }
+          },
+          "legal_reference": "Hinweis 25 Aufwandsentschädigungen/Aufwandspauschalen",
+          "context": "Erfassung von Aufwandsentschädigungen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": null,
+          "field_id": "WBA-19a",
+          "label": "Aufwandsentschädigungen Tabelle",
+          "type": "table",
+          "required": false,
+          "helper": "Tragen Sie alle Aufwandsentschädigungen ein",
+          "table_columns": [
+            {
+              "label": "Name der Person",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Art der Tätigkeit",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Zahlungseingang am (TT.MM.JJJJ)",
+              "type": "date",
+              "required": true,
+              "validation": {
+                "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$"
+              }
+            }
+          ],
+          "context": "Details zu Aufwandsentschädigungen",
+          "ui_hint": "table_dynamic"
+        },
+        {
+          "field_number": 20,
+          "field_id": "WBA-20",
+          "label": "Erhalten Sie oder eine Person der Bedarfsgemeinschaft Einkommen von Sozialleistungsträgern?",
+          "type": "radio",
+          "required": true,
+          "helper": "Zum Beispiel Wohngeld, Sozialhilfe, Leistungen der Agentur für Arbeit, Unterhaltsleistungen, Krankengeld, Übergangsgeld, Leistungen der Familienkasse, Renten, Sachbezüge oder andere Einnahmen",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["WBA-20a"],
+              "follow_up": "Bitte füllen Sie die nachfolgende Tabelle aus und fügen Sie aktuelle Nachweise bei"
+            },
+            "on_nein": {
+              "section_jump": "WBA-21",
+              "follow_up": "Weiter mit Frage 21"
+            }
+          },
+          "context": "Erfassung aller Sozialleistungen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": null,
+          "field_id": "WBA-20a",
+          "label": "Sozialleistungen Tabelle",
+          "type": "table",
+          "required": false,
+          "helper": "Tragen Sie alle Sozialleistungen ein",
+          "table_columns": [
+            {
+              "label": "Name der Person",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Leistungs-/Einkommensart",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Auszahlende Stelle",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Monatliche Höhe in Euro",
+              "type": "currency",
+              "required": true
+            }
+          ],
+          "context": "Details zu allen Sozialleistungen",
+          "ui_hint": "table_dynamic"
+        },
+        {
+          "field_number": 21,
+          "field_id": "WBA-21",
+          "label": "Erhalten Sie oder eine Person der Bedarfsgemeinschaft andere (nicht aufgeführte) Einnahmen?",
+          "type": "radio",
+          "required": true,
+          "helper": "Zum Beispiel Einnahmen aus Vermietung oder Verpachtung",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["WBA-22"],
+              "follow_up": "Bitte geben Sie die Art der Einnahme an"
+            },
+            "on_nein": {
+              "section_jump": "F",
+              "follow_up": "Weiter mit Abschnitt F"
+            }
+          },
+          "context": "Erfassung sonstiger Einnahmen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": 22,
+          "field_id": "WBA-22",
+          "label": "Bitte geben Sie die Art der Einnahme an",
+          "type": "textarea",
+          "required": false,
+          "helper": "Beschreiben Sie die Art der sonstigen Einnahmen. Bürgergeld brauchen Sie hier nicht einzutragen",
+          "examples": "Einnahmen aus Vermietung einer Wohnung, 450 Euro monatlich",
+          "context": "Details zu sonstigen Einnahmen",
+          "ui_hint": "textarea_medium"
+        }
+      ]
+    },
+    "F": {
+      "title": "Angaben zu Änderungen in der Vergangenheit",
+      "fields": [
+        {
+          "field_number": 23,
+          "field_id": "WBA-23",
+          "label": "Gab es zu Ihren Angaben für den letzten Bewilligungszeitraum weitere Änderungen, welche Sie dem Jobcenter bisher nicht mitgeteilt haben?",
+          "type": "radio",
+          "required": true,
+          "helper": "Das kann zum Beispiel eine Schwangerschaft, die Anerkennung einer Schwerbehinderung, ein Sterbefall, eine Änderung des Familienstandes, die Änderung der Vermögensverhältnisse oder das Entstehen von Mehrbedarfen sein",
+          "options": [
+            {
+              "value": "ja",
+              "label": "Ja"
+            },
+            {
+              "value": "nein",
+              "label": "Nein"
+            }
+          ],
+          "dependencies": {
+            "on_ja": {
+              "fields": ["WBA-23a"],
+              "follow_up": "Bitte füllen Sie die nachfolgende Tabelle aus und fügen Sie aktuelle Nachweise bei"
+            }
+          },
+          "context": "Erfassung noch nicht gemeldeter Änderungen",
+          "ui_hint": "radio_inline"
+        },
+        {
+          "field_number": null,
+          "field_id": "WBA-23a",
+          "label": "Änderungen in der Vergangenheit Tabelle",
+          "type": "table",
+          "required": false,
+          "helper": "Tragen Sie alle noch nicht gemeldeten Änderungen ein",
+          "table_columns": [
+            {
+              "label": "Name der Person",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Art der Änderung",
+              "type": "text",
+              "required": true
+            },
+            {
+              "label": "Tag der Änderung (TT.MM.JJJJ)",
+              "type": "date",
+              "required": true,
+              "validation": {
+                "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$"
+              }
+            }
+          ],
+          "context": "Details zu vergangenen Änderungen",
+          "ui_hint": "table_dynamic"
+        }
+      ]
+    },
+    "G": {
+      "title": "Angaben zu absehbaren Änderungen in der Zukunft",
+      "fields": [
+        {
+          "field_number": 24,
+          "field_id": "WBA-24",
+          "label": "Sind Änderungen in Ihrer Lebenssituation bereits jetzt absehbar?",
+          "type": "checkbox",
+          "required": false,
+          "helper": "Kreuzen Sie bitte Zutreffendes an und fügen Sie bitte, sofern bereits vorhanden, Nachweise bei",
+          "options": [
+            {
+              "value": "familienstand",
+              "label": "Mein Familienstand oder der Familienstand einer Person der Bedarfsgemeinschaft wird sich ändern."
+            },
+            {
+              "value": "umzug",
+              "label": "Ein Umzug der gesamten Bedarfsgemeinschaft ist innerhalb der nächsten 6 Monate geplant."
+            },
+            {
+              "value": "ein_auszug",
+              "label": "Eine oder mehrere Personen der Bedarfsgemeinschaft werden ein- oder ausziehen."
+            },
+            {
+              "value": "versicherung",
+              "label": "Es werden sich Änderungen zur Kranken- oder Pflegeversicherung ergeben."
+            },
+            {
+              "value": "erwerbsfaehigkeit",
+              "label": "Es werden sich Änderungen hinsichtlich der Erwerbsfähigkeit beziehungsweise der gesundheitlichen Lage ergeben."
+            },
+            {
+              "value": "sonstige",
+              "label": "Sonstige Änderungen, beispielsweise die Aufnahme einer Ausbildung/eines Studiums."
+            }
+          ],
+          "context": "Vorausschauende Planung für absehbare Änderungen",
+          "ui_hint": "checkbox_vertical"
+        }
+      ]
+    },
+    "H": {
+      "title": "Erforderliche Anlagen zum Weiterbewilligungsantrag",
+      "fields": [
+        {
+          "field_number": null,
+          "field_id": "WBA-H1",
+          "label": "Kontoauszüge",
+          "type": "checkbox",
+          "required": true,
+          "helper": "Bei einer Antragstellung ist grundsätzlich die Vorlage von Kontoauszügen der letzten drei Monate erforderlich. Bitte achten Sie darauf, dass die Kontoauszüge aller vorhandenen Konten von allen Personen der Bedarfsgemeinschaft vollständig und lückenlos vorgelegt werden",
+          "legal_reference": "Hinweis 20 Kontoauszüge",
+          "context": "Zur Überprüfung Ihrer Einkommens- und Vermögensverhältnisse",
+          "ui_hint": "checkbox_required"
+        },
+        {
+          "field_number": null,
+          "field_id": "WBA-H2",
+          "label": "Anlage EKS",
+          "type": "checkbox",
+          "required": false,
+          "helper": "Dieses Formular wird zusätzlich für diejenige Person in der Bedarfsgemeinschaft benötigt, die eine selbständige oder freiberufliche Tätigkeit ausübt",
+          "context": "Zusätzlich erforderlich bei selbständiger Tätigkeit",
+          "ui_hint": "checkbox_conditional"
+        }
+      ]
+    },
+    "I": {
+      "title": "Hinweise und Unterschrift",
+      "fields": [
+        {
+          "field_number": 25,
+          "field_id": "WBA-25",
+          "label": "Datum",
+          "type": "date",
+          "required": true,
+          "helper": "Geben Sie das heutige Datum ein",
+          "examples": "11.09.2025",
+          "validation": {
+            "pattern": "^[0-9]{2}\\.[0-9]{2}\\.[0-9]{4}$",
+            "hint": "Format: TT.MM.JJJJ"
+          },
+          "context": "Datum der Antragstellung",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 26,
+          "field_id": "WBA-26",
+          "label": "Unterschrift antragstellende Person",
+          "type": "signature",
+          "required": true,
+          "helper": "Ihre rechtsverbindliche Unterschrift. Bei Minderjährigen: Unterschrift erziehungs- oder sorgeberechtigte Person",
+          "context": "Bestätigt die Richtigkeit Ihrer Angaben und Ihre Kenntnisnahme der Pflichten",
+          "ui_hint": "signature_pad"
+        },
+        {
+          "field_number": 27,
+          "field_id": "WBA-27",
+          "label": "Datum",
+          "type": "date",
+          "required": false,
+          "helper": "Nur ausfüllen, falls Sie einen Betreuer/Vormund haben",
+          "context": "Datum der Unterschrift des Betreuers/Vormunds",
+          "ui_hint": "date_picker"
+        },
+        {
+          "field_number": 28,
+          "field_id": "WBA-28",
+          "label": "Unterschrift Betreuerin/Betreuer/Vormund",
+          "type": "signature",
+          "required": false,
+          "helper": "Nur erforderlich, falls Sie unter rechtlicher Betreuung stehen",
+          "context": "Rechtliche Vertretung bei eingeschränkter Geschäftsfähigkeit",
+          "ui_hint": "signature_pad"
+        }
+      ]
+    }
+  }
+}

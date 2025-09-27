@@ -1,0 +1,14 @@
+Flask
+python-dotenv
+openai
+requests
+Pillow
+pytesseract
+PyMuPDF
+sentence-transformers
+chromadb
+langchain
+langchain-openai
+langchain-chroma
+langchain-community
+langchain-huggingface
