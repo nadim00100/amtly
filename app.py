@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, jsonify, session
 from config import Config
 from datetime import datetime
-import re
 
 # Database imports
 from models.database import (
@@ -13,16 +12,16 @@ from models.database import (
 # Core AI services
 from services.openai_service import openai_service
 from services.vector_store import vector_store
+from services.language_detection import language_service
 
 # Core AI functionality
 from core.chat_handler import rag_chat_handler
 from core.document_processor import document_processor
-from core.simple_form_helper import simple_form_helper  # Simplified form system
+from core.simple_form_helper import simple_form_helper
 
-# Keep utilities (as requested)
+# Utilities
 from utils.validation import validation_utils
 from utils.response_formatter import response_formatter
-from utils.file_utils import file_utils
 
 
 def create_app():
@@ -47,67 +46,13 @@ def create_app():
 app = create_app()
 
 
-def detect_german_institution_request(message):
-    """Detect if user is asking for communication with German institutions"""
-    if not message:
-        return False
-
-    message_lower = message.lower()
-
-    # German institutions and bureaucratic entities
-    german_institutions = [
-        'jobcenter', 'arbeitsagentur', 'agentur für arbeit', 'bundesagentur',
-        'sozialamt', 'bürgeramt', 'amt', 'behörde', 'krankenkasse', 'finanzamt',
-        'ausländerbehörde', 'einwohnermeldeamt', 'jugendamt', 'familienkasse',
-        'rentenversicherung', 'berufsgenossenschaft', 'arbeitsamt'
-    ]
-
-    # Email/letter indicators
-    communication_words = [
-        'email', 'e-mail', 'brief', 'letter', 'anschreiben', 'schreiben',
-        'nachricht', 'message', 'write', 'schreib'
-    ]
-
-    has_institution = any(inst in message_lower for inst in german_institutions)
-    has_communication = any(comm in message_lower for comm in communication_words)
-
-    return has_institution and has_communication
-
-
-def detect_user_language(message):
-    """Detect if user is writing in German or English"""
-    if not message:
-        return 'en'
-
-    message_lower = message.lower()
-
-    # Common German words/phrases
-    german_indicators = [
-        'das', 'die', 'der', 'ist', 'und', 'mit', 'von', 'zu', 'auf', 'für',
-        'was', 'wie', 'wo', 'wann', 'warum', 'welche', 'können', 'möchte',
-        'bitte', 'danke', 'hallo', 'hilfe', 'formular', 'antrag', 'dokument',
-        'übersetzen', 'erklären', 'jobcenter', 'bürgergeld', 'bescheid'
-    ]
-
-    # Count German indicators
-    german_count = sum(1 for word in german_indicators if word in message_lower)
-    total_words = len(message_lower.split())
-
-    # If more than 20% German words or specific German phrases, assume German
-    if german_count / max(total_words, 1) > 0.2 or german_count >= 2:
-        return 'de'
-
-    return 'en'
-
-
 def detect_user_intent(message):
     """Detect what user wants to do with the document"""
     if not message:
-        return {'explain': True, 'translate': False}  # Default to explain only
+        return {'explain': True, 'translate': False}
 
     message_lower = message.lower()
 
-    # Check for explicit commands
     wants_explanation = any(word in message_lower for word in [
         'explain', 'erkläre', 'erklären', 'analyse', 'analyze',
         'what is', 'was ist', 'tell me', 'sag mir', 'describe', 'beschreib'
@@ -115,14 +60,11 @@ def detect_user_intent(message):
 
     wants_translation = any(word in message_lower for word in [
         'translate', 'übersetze', 'übersetz', 'translation', 'übersetzung',
-        'in english', 'auf englisch', 'in german', 'auf deutsch', 'to english', 'to german'
+        'in english', 'auf englisch', 'in german', 'auf deutsch'
     ])
 
-    # If neither is explicitly mentioned, default based on context
     if not wants_explanation and not wants_translation:
-        # If just uploading without specific request, explain only
         wants_explanation = True
-        wants_translation = False
 
     return {
         'explain': wants_explanation,
@@ -131,41 +73,26 @@ def detect_user_intent(message):
 
 
 def route_user_message(user_message, conversation_history=None):
-    """Smart routing for user messages with debug logging"""
-
-    print(f"🔍 ROUTING DEBUG: Message = '{user_message[:50]}...'")
+    """Smart routing for user messages - SIMPLIFIED VERSION"""
 
     # 1. Check for explicit form questions (very restrictive)
     is_form_question = simple_form_helper.detect_form_question(user_message)
-    print(f"📝 Form detection: {is_form_question}")
-
     if is_form_question:
-        print("  → Routing to FORM HELPER")
         return 'form'
 
     # 2. Check for German institution email requests
-    is_german_institution_email = detect_german_institution_request(user_message)
-    print(f"✉️ German email detection: {is_german_institution_email}")
-
+    is_german_institution_email = language_service.is_german_institution_request(user_message)
     if is_german_institution_email:
-        print("  → Routing to RAG (German email mode)")
         return 'rag_german_email'
 
-    # 3. Check for document analysis requests
-    if any(word in user_message.lower() for word in
-           ['translate', 'übersetzen', 'explain document', 'dokument erklären']):
-        print("  → Routing to RAG (document analysis)")
-        return 'rag_document'
-
-    # 4. Default: General RAG for all other questions
-    print("  → Routing to RAG (general)")
+    # 3. Everything else goes to general RAG
+    # Note: Document analysis is handled by file upload, not message routing
     return 'rag_general'
 
 
 def handle_direct_openai_fallback(user_message, language, conversation_history=None):
     """Fallback when both form helper and RAG fail"""
 
-    # Build conversation context
     conv_context = ""
     if conversation_history and len(conversation_history) > 1:
         recent = conversation_history[-4:]
@@ -176,19 +103,9 @@ def handle_direct_openai_fallback(user_message, language, conversation_history=N
             conv_lines.append(f"{role}: {content}")
 
         if language == 'de':
-            conv_context = f"""
-
-GESPRÄCHSKONTEXT:
-{chr(10).join(conv_lines)}
-
-Nutze diesen Kontext für Folgefragen."""
+            conv_context = f"\n\nGESPRÄCHSKONTEXT:\n{chr(10).join(conv_lines)}"
         else:
-            conv_context = f"""
-
-CONVERSATION CONTEXT:
-{chr(10).join(conv_lines)}
-
-Use this context for follow-up questions."""
+            conv_context = f"\n\nCONVERSATION CONTEXT:\n{chr(10).join(conv_lines)}"
 
     if language == 'de':
         system_prompt = f"""Du bist Amtly, ein KI-Assistent für deutsche Bürokratie.{conv_context}
@@ -199,8 +116,7 @@ Du hilfst bei:
 - Dokumentenübersetzung und -erklärung
 - Bürokratische Prozesse und Vorschriften
 
-Für konkrete Formular-Ausfüllhilfe verweise auf spezielle Formular-Tools.
-Sei hilfreich, klar und professionell. Antworte auf Deutsch."""
+Sei hilfreich, klar und professionell."""
     else:
         system_prompt = f"""You are Amtly, an AI assistant for German bureaucracy.{conv_context}
 
@@ -210,14 +126,13 @@ You help with:
 - Document translation and explanation
 - Bureaucratic processes and regulations
 
-For specific form-filling help, refer to specialized form tools.
 Be helpful, clear, and professional."""
 
-    result = openai_service.get_response(user_message, system_prompt)
-
-    if result['success']:
-        return result['response']
-    else:
+    try:
+        result = openai_service.get_response(user_message, system_prompt)
+        return result['response'] if result['success'] else "❌ I encountered an error. Please try again."
+    except Exception as e:
+        print(f"OpenAI fallback error: {e}")
         return "❌ I encountered an error. Please try again."
 
 
@@ -291,20 +206,6 @@ def delete_chat_endpoint(chat_id):
         return jsonify({'success': False, 'error': str(e)}), 500
 
 
-@app.route('/api/chats/<int:chat_id>/messages', methods=['GET'])
-def get_chat_messages_endpoint(chat_id):
-    """Get messages for a specific chat"""
-    try:
-        messages = get_chat_messages(chat_id)
-        return jsonify({
-            'success': True,
-            'messages': messages
-        })
-    except Exception as e:
-        print(f"Error getting messages for chat {chat_id}: {e}")
-        return jsonify({'success': False, 'error': str(e)}), 500
-
-
 # ============================================================================
 # MAIN ROUTES
 # ============================================================================
@@ -317,12 +218,11 @@ def index():
 
 @app.route('/chat', methods=['POST'])
 def chat():
-    """Main chat endpoint - RAG + Form Help + Document Processing with conversation history support"""
+    """Main chat endpoint - FIXED VERSION"""
     try:
-        # Get chat_id from form data or create new chat
+        # Get chat_id
         chat_id = request.form.get('chat_id')
         if not chat_id:
-            # Create new chat or get default
             chat_obj = get_or_create_default_chat()
             chat_id = chat_obj.id
         else:
@@ -335,21 +235,17 @@ def chat():
         user_message = request.form.get('message', '').strip() if request.form.get('message') else None
         file = request.files.get('file')
 
-        # Get context from database
+        # Get context
         document_context = chat_obj.document_context or ''
+        conversation_history = get_chat_messages(chat_id, limit=8)
 
-        # Get conversation history for follow-up questions (ALL pathways)
-        conversation_history = get_chat_messages(chat_id, limit=8)  # Last 8 messages for context
-
-        # Basic validation
+        # Validation
         if not user_message and not file:
             error_response = response_formatter.format_error_response(
-                "Please provide a message or upload a file.",
-                'validation_error'
+                "Please provide a message or upload a file.", 'validation_error'
             )
             return jsonify(error_response), 400
 
-        # Validate message if provided
         if user_message:
             is_valid, error = validation_utils.validate_chat_message(user_message)
             if not is_valid:
@@ -360,11 +256,15 @@ def chat():
         file_info = None
         if user_message:
             if file:
+                # FIXED: Get file size without reading entire content
+                file.seek(0, 2)  # Seek to end
+                file_size = file.tell()
+                file.seek(0)  # Reset
+
                 file_info = {
                     'filename': file.filename,
-                    'size': len(file.read())
+                    'size': file_size
                 }
-                file.seek(0)  # Reset file pointer
 
             add_message_to_chat(
                 chat_id=chat_id,
@@ -376,26 +276,35 @@ def chat():
         response_text = ""
         sources = []
 
-        # Detect user language, intent, and German institution requests
-        user_language = detect_user_language(user_message) if user_message else 'en'
-        user_intent = detect_user_intent(user_message) if user_message else {'explain': True, 'translate': False}
-        is_german_institution_email = detect_german_institution_request(user_message) if user_message else False
+        # Detect language and intent
+        try:
+            user_language = language_service.get_response_language(user_message) if user_message else 'en'
+            user_intent = detect_user_intent(user_message) if user_message else {'explain': True, 'translate': False}
+            is_german_institution_email = language_service.is_german_institution_request(
+                user_message) if user_message else False
+        except Exception as e:
+            print(f"Language detection error: {e}")
+            user_language = 'en'
+            user_intent = {'explain': True, 'translate': False}
+            is_german_institution_email = False
 
-        # Override language to German for German institution emails
         if is_german_institution_email:
             user_language = 'de'
 
         # ====================================================================
-        # PROCESS UPLOADED FILE (OCR + Analysis) with conversation history
+        # PROCESS UPLOADED FILE (OCR + Analysis)
         # ====================================================================
         if file:
             try:
                 # Validate file
+                file.seek(0, 2)
+                file_size = file.tell()
+                file.seek(0)
+
                 file_info = {
                     'name': file.filename,
-                    'size': len(file.read())
+                    'size': file_size
                 }
-                file.seek(0)  # Reset file pointer
 
                 is_valid, error = validation_utils.validate_file_upload(file_info)
                 if not is_valid:
@@ -408,199 +317,112 @@ def chat():
                 file_path.unlink()  # Clean up
 
                 if extracted_text:
-                    # Store context in database
+                    # Store context
                     document_context = extracted_text[:4000]
                     update_chat_context(chat_id, document_context=document_context)
 
-                    # Create system prompt with conversation awareness for documents
+                    # Build conversation context
                     conv_context = ""
                     if conversation_history and len(conversation_history) > 1:
                         recent = conversation_history[-4:]
-                        conv_lines = []
-                        for msg in recent:
-                            role = "User" if msg['role'] == 'user' else "Assistant"
-                            content = msg['content'][:120] + "..." if len(msg['content']) > 120 else msg['content']
-                            conv_lines.append(f"{role}: {content}")
+                        conv_lines = [f"{'User' if m['role'] == 'user' else 'Assistant'}: {m['content'][:120]}"
+                                      for m in recent]
+                        conv_context = f"\n\nCONVERSATION CONTEXT:\n{chr(10).join(conv_lines)}"
 
-                        if user_language == 'de':
-                            conv_context = f"""
-
-GESPRÄCHSKONTEXT (für Folgefragen zum Dokument):
-{chr(10).join(conv_lines)}
-
-Nutze diesen Kontext um Folgefragen zum Dokument zu beantworten."""
-                        else:
-                            conv_context = f"""
-
-CONVERSATION CONTEXT (for document follow-up questions):
-{chr(10).join(conv_lines)}
-
-Use this context to answer follow-up questions about the document."""
-
-                    # Create smart system prompt based on user intent and language with conversation awareness
+                    # Create system prompt based on intent
                     if user_language == 'de':
                         if user_intent['explain'] and user_intent['translate']:
-                            system_prompt = f"""Du bist Amtly, ein deutscher Bürokratie-Assistent.{conv_context}
-                            Ein Benutzer hat ein Dokument hochgeladen und möchte sowohl eine Erklärung als auch eine Übersetzung.
-
-                            Mach folgendes:
-                            1. Erkläre auf Deutsch, worum es in diesem Dokument geht
-                            2. Übersetze den Inhalt ins Deutsche (falls das Dokument in einer anderen Sprache ist) oder ins Englische (falls es auf Deutsch ist)
-                            3. Hebe wichtige Informationen hervor
-
-                            Sei hilfreich und klar."""
+                            system_prompt = f"Du bist Amtly.{conv_context}\n\nErkläre UND übersetze dieses Dokument."
                         elif user_intent['translate']:
-                            system_prompt = f"""Du bist Amtly, ein Übersetzungsassistent.{conv_context}
-                            Ein Benutzer hat ein Dokument hochgeladen und möchte nur eine Übersetzung.
-
-                            Übersetze den Dokumentinhalt ins Deutsche (falls in einer anderen Sprache) oder ins Englische (falls auf Deutsch).
-                            Gib NUR die Übersetzung aus, keine zusätzlichen Erklärungen."""
-                        else:  # explain only
-                            system_prompt = f"""Du bist Amtly, ein deutscher Bürokratie-Assistent.{conv_context}
-                            Ein Benutzer hat ein Dokument hochgeladen und möchte eine Erklärung.
-
-                            Erkläre auf Deutsch:
-                            1. Worum es in diesem Dokument geht
-                            2. Wichtige Informationen oder nächste Schritte
-                            3. Praktische Tipps für den Umgang mit deutschen Behörden
-
-                            Übersetze NICHT, sondern erkläre nur. Sei hilfreich und klar."""
-                    else:  # English
+                            system_prompt = f"Du bist Amtly.{conv_context}\n\nÜbersetze NUR (keine Erklärung)."
+                        else:
+                            system_prompt = f"Du bist Amtly.{conv_context}\n\nErkläre das Dokument (NICHT übersetzen)."
+                    else:
                         if user_intent['explain'] and user_intent['translate']:
-                            system_prompt = f"""You are Amtly, a German bureaucracy assistant.{conv_context}
-                            A user has uploaded a document and wants both explanation and translation.
-
-                            Please:
-                            1. Explain what this document is about
-                            2. Provide English translation of the content
-                            3. Highlight important information or next steps
-
-                            Be helpful and clear."""
+                            system_prompt = f"You are Amtly.{conv_context}\n\nExplain AND translate this document."
                         elif user_intent['translate']:
-                            system_prompt = f"""You are Amtly, a translation assistant.{conv_context}
-                            A user has uploaded a document and wants only translation.
-
-                            Translate the document content to English (if in German) or German (if in English).
-                            Provide ONLY the translation, no additional explanations."""
-                        else:  # explain only
-                            system_prompt = f"""You are Amtly, a German bureaucracy assistant.{conv_context}
-                            A user has uploaded a document and wants explanation only.
-
-                            Explain in English:
-                            1. What this document is about
-                            2. Important information or next steps
-                            3. Practical guidance for dealing with German bureaucracy
-
-                            Do NOT translate, only explain. Be helpful and clear."""
+                            system_prompt = f"You are Amtly.{conv_context}\n\nTranslate ONLY (no explanation)."
+                        else:
+                            system_prompt = f"You are Amtly.{conv_context}\n\nExplain the document (do NOT translate)."
 
                     result = openai_service.get_response(
-                        f"Please analyze this document:\n\n{extracted_text[:2000]}",
+                        f"Analyze this document:\n\n{extracted_text[:2000]}",
                         system_prompt
                     )
 
                     if result['success']:
-                        # Format response based on what was requested
-                        if user_intent['explain'] and user_intent['translate']:
-                            response_text = f"📄 **Document Analysis & Translation:**\n\n{result['response']}"
-                        elif user_intent['translate']:
-                            response_text = f"🌐 **Document Translation:**\n\n{result['response']}"
-                        else:  # explain only
-                            response_text = f"📄 **Document Analysis:**\n\n{result['response']}"
+                        prefix = "📄 **Document Analysis:**\n\n"
+                        response_text = prefix + result['response']
                     else:
-                        response_text = "📄 **Document processed** but I had trouble analyzing it. You can ask me questions about it!"
+                        response_text = "📄 Document processed but had trouble analyzing it."
 
-                    # Set the uploaded file as the source
                     sources.append(file.filename)
                 else:
-                    response_text = "❌ I couldn't extract readable text from this document. Please ensure it's clear and well-scanned."
+                    response_text = "❌ Couldn't extract text. Ensure document is clear."
 
             except Exception as e:
+                print(f"File processing error: {e}")
                 error_response = response_formatter.format_error_response(
-                    f"Error processing file: {str(e)}",
-                    'file_processing'
+                    f"Error processing file: {str(e)}", 'file_processing'
                 )
                 return jsonify(error_response), 400
 
         # ====================================================================
-        # PROCESS TEXT MESSAGE (IMPROVED ROUTING + RAG + Natural AI) with conversation history
+        # PROCESS TEXT MESSAGE (ROUTING + RAG + AI)
         # ====================================================================
         if user_message:
-            # IMPROVED ROUTING with debug
             route = route_user_message(user_message, conversation_history)
 
             if route == 'form':
-                # Handle specific form questions only
                 form_result = simple_form_helper.help_with_form(
-                    user_message,
-                    conversation_history=conversation_history
+                    user_message, conversation_history=conversation_history
                 )
 
                 if form_result['success']:
-                    if response_text:
-                        response_text += f"\n\n---\n\n📝 **Form Help:**\n\n{form_result['response']}"
-                    else:
-                        response_text = f"📝 **Form Help:**\n\n{form_result['response']}"
-
+                    form_response = f"📝 **Form Help:**\n\n{form_result['response']}"
+                    response_text = f"{response_text}\n\n---\n\n{form_response}" if response_text else form_response
                     message_type = 'form'
                 else:
-                    # If form help fails, fall back to RAG
-                    print("⚠️ Form help failed, falling back to RAG")
                     route = 'rag_general'
 
             if route.startswith('rag'):
-                # Handle all non-form questions with RAG system
                 effective_language = 'de' if route == 'rag_german_email' else user_language
 
                 try:
                     rag_result = rag_chat_handler.generate_rag_response(
-                        user_message,
-                        document_context,
-                        effective_language,
+                        user_message, document_context, effective_language,
                         conversation_history=conversation_history
                     )
 
                     if rag_result and rag_result.get('success'):
-                        if response_text:
-                            response_text += f"\n\n---\n\n{rag_result['response']}"
-                        else:
-                            response_text = rag_result['response']
+                        rag_response = rag_result['response']
+                        response_text = f"{response_text}\n\n---\n\n{rag_response}" if response_text else rag_response
 
-                        # Only add RAG sources if we don't already have document sources
                         if rag_result.get('sources') and not sources:
                             sources.extend(rag_result['sources'])
-                        elif rag_result.get('sources') and sources:
-                            # If we have document sources, add RAG sources separately
+                        elif rag_result.get('sources'):
                             rag_sources = rag_result.get('sources', [])
                             if rag_sources:
                                 response_text += f"\n\n📚 *Additional references: {', '.join(rag_sources)}*"
                     else:
-                        # RAG failed, use direct OpenAI fallback
-                        print("⚠️ RAG failed, using direct OpenAI fallback")
-                        fallback_response = handle_direct_openai_fallback(user_message, effective_language,
-                                                                          conversation_history)
-
-                        if response_text:
-                            response_text += f"\n\n---\n\n{fallback_response}"
-                        else:
-                            response_text = fallback_response
+                        fallback = handle_direct_openai_fallback(
+                            user_message, effective_language, conversation_history
+                        )
+                        response_text = f"{response_text}\n\n---\n\n{fallback}" if response_text else fallback
 
                 except Exception as e:
-                    # Final fallback to simple OpenAI if RAG fails
-                    print(f"RAG failed with exception, using fallback: {e}")
-                    fallback_response = handle_direct_openai_fallback(user_message, effective_language,
-                                                                      conversation_history)
-
-                    if response_text:
-                        response_text += f"\n\n---\n\n{fallback_response}"
-                    else:
-                        response_text = fallback_response
+                    print(f"RAG error: {e}")
+                    fallback = handle_direct_openai_fallback(
+                        user_message, effective_language, conversation_history
+                    )
+                    response_text = f"{response_text}\n\n---\n\n{fallback}" if response_text else fallback
 
         # Add assistant response to database
         message_type = 'document' if file else 'chat'
         if user_message and route == 'form':
             message_type = 'form'
 
-        assistant_message = add_message_to_chat(
+        add_message_to_chat(
             chat_id=chat_id,
             role='assistant',
             content=response_text,
@@ -609,14 +431,13 @@ Use this context to answer follow-up questions about the document."""
             used_knowledge_base=bool(sources)
         )
 
-        # Format final response
+        # Format response
         formatted_response = response_formatter.format_chat_response(
             response_text,
             sources=sources if sources else [],
             response_type=message_type
         )
 
-        # Add chat context
         formatted_response["chat_id"] = chat_id
         if document_context:
             formatted_response["document_text"] = document_context
@@ -626,52 +447,35 @@ Use this context to answer follow-up questions about the document."""
     except Exception as e:
         print(f"Chat error: {e}")
         error_response = response_formatter.format_error_response(
-            "An unexpected error occurred. Please try again.",
-            'server_error'
+            "An unexpected error occurred.", 'server_error'
         )
         return jsonify(error_response), 500
 
 
-# ============================================================================
-# SESSION MANAGEMENT (Updated for database)
-# ============================================================================
-
 @app.route('/clear_session', methods=['POST'])
 def clear_session():
-    """Clear user session and document context"""
+    """Clear user session"""
     try:
         session.clear()
         return jsonify({"message": "Session cleared successfully", "status": "success"})
     except Exception as e:
         error_response = response_formatter.format_error_response(
-            "Failed to clear session",
-            'session_error'
+            "Failed to clear session", 'session_error'
         )
         return jsonify(error_response), 500
 
 
 # ============================================================================
-# DEBUG AND HEALTH ROUTES
+# HEALTH CHECK
 # ============================================================================
 
 @app.route('/health')
 def health_check():
     """Application health check"""
     try:
-        # Check OpenAI configuration
         openai_configured = bool(Config.OPENAI_API_KEY)
-
-        # Check vector store
         vector_info = vector_store.get_collection_info()
-        vector_ready = vector_info['count'] > 0
 
-        # Check directories
-        directories_ready = all([
-            Config.KNOWLEDGE_BASE_DIR.exists(),
-            Config.UPLOADS_DIR.exists()
-        ])
-
-        # Check database
         with app.app_context():
             chat_count = Chat.query.count()
             message_count = Message.query.count()
@@ -680,76 +484,13 @@ def health_check():
             "status": "healthy",
             "openai_configured": openai_configured,
             "vector_store_documents": vector_info['count'],
-            "vector_store_ready": vector_ready,
-            "directories_ready": directories_ready,
             "database_chats": chat_count,
             "database_messages": message_count,
             "timestamp": datetime.now().isoformat()
         })
 
     except Exception as e:
-        return jsonify({
-            "status": "unhealthy",
-            "error": str(e)
-        }), 500
-
-
-@app.route('/debug/knowledge_base')
-def debug_knowledge_base():
-    """Debug endpoint to inspect knowledge base"""
-    try:
-        info = vector_store.get_collection_info()
-
-        # Test search
-        test_results = vector_store.search("Bürgergeld", k=3)
-
-        return jsonify({
-            "vector_store_count": info['count'],
-            "test_search_results": len(test_results),
-            "status": "ready" if info['count'] > 0 else "empty",
-            "sample_search": [
-                {
-                    "content": result.page_content[:100] + "...",
-                    "source": result.metadata.get('source', 'unknown')
-                }
-                for result in test_results[:2]
-            ]
-        })
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@app.route('/debug/routing')
-def debug_routing():
-    """Debug endpoint to test routing logic"""
-    test_cases = [
-        "Do I always need to be reachable by Jobcenter, or can I travel without telling?",  # Should be RAG
-        "Help me fill out WBA form section B",  # Should be FORM
-        "How do I fill in field 4.2 of the HA form?",  # Should be FORM
-        "What is Bürgergeld?",  # Should be RAG
-        "Write an email to Jobcenter about my application",  # Should be RAG (German email)
-        "Wie viel Bürgergeld bekomme ich?",  # Should be RAG
-        "Explain this document",  # Should be RAG (document)
-        "Wie fülle ich das Formular aus?",  # Should be FORM
-        "Was bedeutet Abschnitt 4.2 im Antrag?",  # Should be FORM
-        "Muss ich erreichbar sein für das Jobcenter?",  # Should be RAG
-    ]
-
-    results = []
-    for question in test_cases:
-        route = route_user_message(question)
-        results.append({
-            'question': question,
-            'route': route,
-            'is_form': simple_form_helper.detect_form_question(question),
-            'is_german_email': detect_german_institution_request(question)
-        })
-
-    return jsonify({
-        'routing_tests': results,
-        'total_tests': len(test_cases)
-    })
+        return jsonify({"status": "unhealthy", "error": str(e)}), 500
 
 
 # ============================================================================
@@ -758,26 +499,19 @@ def debug_routing():
 
 @app.errorhandler(404)
 def not_found(error):
-    """Handle 404 errors"""
     return render_template('index.html'), 404
 
 
 @app.errorhandler(500)
 def internal_error(error):
-    """Handle 500 errors"""
-    error_response = response_formatter.format_error_response(
-        "Internal server error",
-        'server_error'
-    )
+    error_response = response_formatter.format_error_response("Internal server error", 'server_error')
     return jsonify(error_response), 500
 
 
 @app.errorhandler(413)
 def file_too_large(error):
-    """Handle file too large errors"""
     error_response = response_formatter.format_error_response(
-        "File too large. Maximum size is 16MB.",
-        'file_too_large'
+        "File too large. Maximum size is 16MB.", 'file_too_large'
     )
     return jsonify(error_response), 413
 
@@ -791,14 +525,12 @@ if __name__ == '__main__':
     print(f"📁 Data directory: {Config.DATA_DIR}")
     print(f"🤖 OpenAI configured: {bool(Config.OPENAI_API_KEY)}")
 
-    # Check vector store status
     try:
         info = vector_store.get_collection_info()
         print(f"📚 Knowledge base: {info['count']} documents loaded")
     except:
         print("📚 Knowledge base: Not initialized")
 
-    # Check database status
     with app.app_context():
         chat_count = Chat.query.count()
         message_count = Message.query.count()
@@ -807,9 +539,4 @@ if __name__ == '__main__':
     print(f"🌐 Starting server on http://localhost:8000")
     print("=" * 50)
 
-    app.run(
-        debug=Config.DEBUG,
-        host='0.0.0.0',
-        port=8000,
-        threaded=True
-    )
+    app.run(debug=Config.DEBUG, host='0.0.0.0', port=8000, threaded=True)

@@ -1,13 +1,12 @@
-import os
 import hashlib
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import Dict
 from werkzeug.utils import secure_filename
 from config import Config
 
 
 class FileUtils:
-    """Utility class for file operations"""
+    """Utility class for file operations - CLEANED VERSION"""
 
     @staticmethod
     def get_file_hash(file_path: Path) -> str:
@@ -53,29 +52,6 @@ class FileUtils:
             return False
 
     @staticmethod
-    def cleanup_old_files(directory: Path, max_age_hours: int = 24) -> int:
-        """Clean up old files in directory"""
-        if not directory.exists():
-            return 0
-
-        import time
-        current_time = time.time()
-        max_age_seconds = max_age_hours * 3600
-        deleted_count = 0
-
-        try:
-            for file_path in directory.iterdir():
-                if file_path.is_file():
-                    file_age = current_time - file_path.stat().st_mtime
-                    if file_age > max_age_seconds:
-                        file_path.unlink()
-                        deleted_count += 1
-        except Exception as e:
-            print(f"Error cleaning up files: {e}")
-
-        return deleted_count
-
-    @staticmethod
     def get_file_info(file_path: Path) -> Dict:
         """Get comprehensive file information"""
         if not file_path.exists():
@@ -92,22 +68,6 @@ class FileUtils:
             'is_allowed': FileUtils.is_allowed_file(file_path.name),
             'hash': FileUtils.get_file_hash(file_path)
         }
-
-    @staticmethod
-    def list_files_by_type(directory: Path, extensions: List[str] = None) -> List[Dict]:
-        """List files in directory with their info"""
-        if not directory.exists():
-            return []
-
-        if extensions is None:
-            extensions = list(Config.ALLOWED_EXTENSIONS)
-
-        files_info = []
-        for file_path in directory.iterdir():
-            if file_path.is_file() and file_path.suffix.lower() in extensions:
-                files_info.append(FileUtils.get_file_info(file_path))
-
-        return sorted(files_info, key=lambda x: x.get('modified', 0), reverse=True)
 
     @staticmethod
     def validate_file_size(file_path: Path, max_size: int = None) -> tuple[bool, str]:

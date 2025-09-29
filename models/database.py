@@ -11,14 +11,12 @@ class Chat(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False, default="New Chat")
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, index=True)
 
-    # Current form context for session memory
     current_form = db.Column(db.String(50), nullable=True)
-    document_context = db.Column(db.Text, nullable=True)  # For uploaded documents
+    document_context = db.Column(db.Text, nullable=True)
 
-    # Relationship with messages
     messages = db.relationship('Message', backref='chat', lazy=True,
                                cascade='all, delete-orphan',
                                order_by='Message.timestamp')
@@ -42,7 +40,7 @@ class Chat(db.Model):
         return "New conversation"
 
     def update_title_from_first_message(self):
-        """Smart auto-generate title from first user message (ChatGPT style)"""
+        """Smart auto-generate title from first user message"""
         first_user_message = None
         for message in self.messages:
             if message.role == 'user':
@@ -59,7 +57,7 @@ class Chat(db.Model):
         """Generate ChatGPT/Claude style names (clean, 2-3 words)"""
         msg = message.lower().strip()
 
-        # Topic-based names (exactly like ChatGPT)
+        # Topic-based names
         topics = {
             # German bureaucracy
             'bürgergeld': 'Bürgergeld Help',
@@ -122,12 +120,9 @@ class Chat(db.Model):
             return 'General Help'
         elif any(phrase in msg for phrase in ['explain', 'erklären', 'erkläre']):
             return 'Explanation Request'
-        elif any(phrase in msg for phrase in ['difference', 'unterschied']):
-            return 'Comparison Help'
 
         # Extract first meaningful word + "Help"
         import re
-        # Remove common stop words
         clean_msg = re.sub(
             r'\b(ich|mir|mich|der|die|das|ein|eine|ist|sind|can|i|the|a|an|is|are|do|does|how|what|when|where|why|help|hilfe|please|bitte)\b',
             '', msg)
@@ -136,7 +131,6 @@ class Chat(db.Model):
         if words:
             return f"{words[0].title()} Help"
 
-        # Final fallback
         return "New Chat"
 
 
@@ -144,18 +138,22 @@ class Message(db.Model):
     """Individual message model"""
     __tablename__ = 'messages'
 
+    __table_args__ = (
+        db.Index('idx_chat_messages', 'chat_id', 'timestamp'),
+        db.Index('idx_chat_role', 'chat_id', 'role'),
+    )
+
     id = db.Column(db.Integer, primary_key=True)
-    chat_id = db.Column(db.Integer, db.ForeignKey('chats.id'), nullable=False)
+    chat_id = db.Column(db.Integer, db.ForeignKey('chats.id'), nullable=False, index=True)
 
-    role = db.Column(db.String(20), nullable=False)  # 'user' or 'assistant'
+    role = db.Column(db.String(20), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
 
-    # Metadata
-    sources = db.Column(db.Text, nullable=True)  # JSON string of sources
-    message_type = db.Column(db.String(20), default='chat')  # 'chat', 'document', 'form', etc.
+    sources = db.Column(db.Text, nullable=True)
+    message_type = db.Column(db.String(20), default='chat')
     used_knowledge_base = db.Column(db.Boolean, default=False)
-    file_info = db.Column(db.Text, nullable=True)  # JSON string for uploaded file info
+    file_info = db.Column(db.Text, nullable=True)
 
     def to_dict(self):
         """Convert to dictionary for JSON serialization"""
@@ -190,15 +188,11 @@ def init_database(app):
     db.init_app(app)
 
     with app.app_context():
-        # Create tables
         db.create_all()
-
         print("📊 Database initialized successfully!")
 
-        # Check if we have any chats
         chat_count = Chat.query.count()
         message_count = Message.query.count()
-
         print(f"📈 Database stats: {chat_count} chats, {message_count} messages")
 
         return db
@@ -209,7 +203,6 @@ def get_or_create_default_chat():
     latest_chat = Chat.query.order_by(Chat.updated_at.desc()).first()
 
     if not latest_chat:
-        # Create first chat
         latest_chat = Chat(title="New Chat")
         db.session.add(latest_chat)
         db.session.commit()
@@ -219,9 +212,9 @@ def get_or_create_default_chat():
 
 
 def create_new_chat(title=None):
-    """Create a new chat session with ChatGPT-style default title"""
+    """Create a new chat session"""
     if not title:
-        title = "New Chat"  # Simple like ChatGPT/Claude
+        title = "New Chat"
 
     chat = Chat(title=title)
     db.session.add(chat)
@@ -232,42 +225,64 @@ def create_new_chat(title=None):
 
 def add_message_to_chat(chat_id, role, content, sources=None, message_type='chat',
                         used_knowledge_base=False, file_info=None):
-    """Add a message to a chat with debug naming"""
+    """Add message to chat - FIXED NAMING VERSION"""
 
-    # Get chat and count existing user messages BEFORE adding new one
-    chat = Chat.query.get(chat_id)
-    if not chat:
+    try:
+        # Get chat (with locking for safety)
+        chat = Chat.query.filter_by(id=chat_id).with_for_update().first()
+        if not chat:
+            print(f"❌ Chat {chat_id} not found")
+            return None
+
+        # Count EXISTING user messages BEFORE adding new one
+        current_user_messages = Message.query.filter_by(
+            chat_id=chat_id,
+            role='user'
+        ).count()
+
+        print(f"🐛 Chat {chat_id}: {current_user_messages} existing user messages")
+
+        # Create message
+        message = Message(
+            chat_id=chat_id,
+            role=role,
+            content=content,
+            message_type=message_type,
+            used_knowledge_base=used_knowledge_base
+        )
+
+        if sources:
+            message.set_sources(sources)
+        if file_info:
+            message.set_file_info(file_info)
+
+        db.session.add(message)
+
+        # Update chat timestamp
+        chat.updated_at = datetime.utcnow()
+
+        # CRITICAL: Name the chat on FIRST user message only
+        if role == 'user' and current_user_messages == 0:
+            old_title = chat.title
+            new_title = chat._generate_smart_title(content)
+            chat.title = new_title
+            print(f"📝 NAMING: Chat {chat_id}: '{old_title}' → '{new_title}'")
+        else:
+            if role == 'user':
+                print(f"⏭️  SKIP NAMING: Chat {chat_id} already has {current_user_messages} user messages")
+
+        # Commit everything
+        db.session.commit()
+        print(f"✅ Message added to chat {chat_id}, title: '{chat.title}'")
+
+        return message
+
+    except Exception as e:
+        print(f"❌ Error adding message to chat {chat_id}: {e}")
+        db.session.rollback()
+        import traceback
+        traceback.print_exc()
         return None
-
-    current_user_messages = Message.query.filter_by(chat_id=chat_id, role='user').count()
-    print(f"🐛 DEBUG: Chat {chat_id} has {current_user_messages} user messages")
-
-    # Create message
-    message = Message(
-        chat_id=chat_id,
-        role=role,
-        content=content,
-        message_type=message_type,
-        used_knowledge_base=used_knowledge_base
-    )
-
-    if sources:
-        message.set_sources(sources)
-    if file_info:
-        message.set_file_info(file_info)
-
-    db.session.add(message)
-    chat.updated_at = datetime.utcnow()
-
-    # NAMING: Only for first user message
-    if role == 'user' and current_user_messages == 0:
-        old_title = chat.title
-        new_title = chat._generate_smart_title(content)
-        chat.title = new_title
-        print(f"📝 NAMING: '{old_title}' → '{new_title}'")
-
-    db.session.commit()
-    return message
 
 
 def get_chat_messages(chat_id, limit=100):

@@ -1,6 +1,3 @@
-import os
-import json
-from pathlib import Path
 from langchain_chroma import Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
@@ -9,6 +6,8 @@ from config import Config
 
 
 class VectorStore:
+    """Vector store for knowledge base - CLEANED VERSION"""
+
     def __init__(self):
         self.embeddings = embedding_service.embeddings
         self.persist_directory = Config.KNOWLEDGE_BASE_DIR / "embeddings"
@@ -51,31 +50,6 @@ class VectorStore:
             print(f"Error adding documents to vector store: {e}")
             return 0
 
-    def add_documents_from_directory(self, directory_path):
-        """Add all documents from a directory"""
-        directory = Path(directory_path)
-        added_count = 0
-
-        for file_path in directory.glob("*.txt"):
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    content = f.read()
-
-                metadata = {
-                    'source': file_path.name,
-                    'file_path': str(file_path),
-                    'document_type': 'knowledge_base'
-                }
-
-                count = self.add_document(content, metadata)
-                added_count += count
-                print(f"Added {count} chunks from {file_path.name}")
-
-            except Exception as e:
-                print(f"Error processing {file_path}: {e}")
-
-        return added_count
-
     def search(self, query, k=5, filter=None):
         """Search for similar documents"""
         try:
@@ -115,44 +89,6 @@ class VectorStore:
         except Exception as e:
             print(f"Error getting collection info: {e}")
             return {'count': 0, 'name': 'unknown', 'status': 'error'}
-
-    def load_chunks_from_jsonl(self, jsonl_file):
-        """Load and inspect chunks from JSONL file"""
-        chunks = []
-        try:
-            with open(jsonl_file, 'r', encoding='utf-8') as f:
-                for line in f:
-                    if line.strip():
-                        chunks.append(json.loads(line))
-        except Exception as e:
-            print(f"Error loading JSONL file {jsonl_file}: {e}")
-        return chunks
-
-    def get_chunk_files(self):
-        """List all JSONL chunk files"""
-        chunks_dir = Config.KNOWLEDGE_BASE_DIR / "chunks"
-        if chunks_dir.exists():
-            return list(chunks_dir.glob("*.jsonl"))
-        return []
-
-    def test_search(self, query="test", k=3):
-        """Test search functionality"""
-        try:
-            results = self.search_with_scores(query, k=k)
-            return {
-                'query': query,
-                'results_count': len(results),
-                'results': [
-                    {
-                        'content': doc.page_content[:200] + "...",
-                        'score': float(score),
-                        'source': doc.metadata.get('source', 'unknown')
-                    }
-                    for doc, score in results
-                ]
-            }
-        except Exception as e:
-            return {'error': str(e), 'results_count': 0}
 
 
 # Create global instance

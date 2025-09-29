@@ -1,4 +1,3 @@
-import os
 import uuid
 from pathlib import Path
 from PIL import Image
@@ -8,6 +7,8 @@ from config import Config
 
 
 class DocumentProcessor:
+    """Document processing with OCR - CLEANED & FIXED VERSION"""
+
     def __init__(self):
         self.allowed_extensions = Config.ALLOWED_EXTENSIONS
         self.max_file_size = Config.MAX_FILE_SIZE
@@ -54,7 +55,7 @@ class DocumentProcessor:
             raise Exception(f"Unsupported file type: {file_extension}")
 
     def save_uploaded_file(self, file):
-        """Save uploaded file and return path"""
+        """Save uploaded file and return path - FIXED VERSION"""
         if not file or file.filename == '':
             raise Exception("No file selected")
 
@@ -70,10 +71,11 @@ class DocumentProcessor:
             # Save file
             file.save(file_path)
 
-            # Check file size
+            # Check file size AFTER saving (more reliable)
             if file_path.stat().st_size > self.max_file_size:
                 file_path.unlink()  # Delete the file
-                raise Exception(f"File too large. Maximum size: {self.max_file_size // (1024 * 1024)}MB")
+                max_mb = self.max_file_size // (1024 * 1024)
+                raise Exception(f"File too large. Maximum size: {max_mb}MB")
 
             return file_path
 
@@ -82,20 +84,6 @@ class DocumentProcessor:
             if file_path.exists():
                 file_path.unlink()
             raise Exception(f"Error saving file: {str(e)}")
-
-    def get_file_info(self, file_path):
-        """Get information about processed file"""
-        if not file_path.exists():
-            return None
-
-        stat = file_path.stat()
-        return {
-            'filename': file_path.name,
-            'size': stat.st_size,
-            'size_mb': round(stat.st_size / (1024 * 1024), 2),
-            'extension': file_path.suffix.lower(),
-            'is_allowed': self.is_allowed_file(file_path.name)
-        }
 
 
 # Create global instance

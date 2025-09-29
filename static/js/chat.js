@@ -23,7 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let messageCounter = 0;
     let currentChatId = null;
     let chats = [];
-    let isHomePage = true; // NEW: Track if we're on home page
+    let isHomePage = true;
+    let isProcessing = false; // FIXED: Prevent race conditions
 
     // Initialize
     init();
@@ -32,30 +33,19 @@ document.addEventListener('DOMContentLoaded', function() {
         setupEventListeners();
         updateFileButton();
         loadChats();
-        showHomePage(); // NEW: Always start with home page
+        showHomePage();
     }
 
     function setupEventListeners() {
-        // Basic chat functionality
         sendButton.addEventListener('click', sendMessage);
         userInput.addEventListener('keypress', handleInputKeypress);
-
-        // File handling
         fileButton.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', handleFileSelection);
-
-        // Session management
         clearButton.addEventListener('click', clearSession);
-
-        // Example prompts
         document.addEventListener('click', handleExampleClick);
-
-        // Sidebar functionality
         sidebarToggle.addEventListener('click', toggleSidebar);
         sidebarOverlay.addEventListener('click', closeSidebar);
-        newChatBtn.addEventListener('click', startNewChat); // UPDATED: Different function
-
-        // Mobile responsiveness
+        newChatBtn.addEventListener('click', startNewChat);
         window.addEventListener('resize', handleResize);
     }
 
@@ -64,30 +54,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // ========================================================================
 
     function showHomePage() {
-        // Set home page state
         isHomePage = true;
         currentChatId = null;
 
-        // Update header
         chatTitle.textContent = "Welcome to Amtly";
         chatSubtitle.textContent = "AI German Bureaucracy Assistant";
 
-        // Show welcome message
         showWelcomeMessage();
 
-        // Remove active state from all chats in sidebar
         chatList.querySelectorAll('.chat-item').forEach(item => {
             item.classList.remove('active');
         });
 
-        // Focus on input
         userInput.focus();
     }
 
     function startNewChat() {
-        // Simply go to home page - don't create chat until user sends message
         showHomePage();
-
         if (window.innerWidth <= 768) {
             closeSidebar();
         }
@@ -101,10 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 chats = data.chats;
                 renderChatList();
-                // REMOVED: Don't auto-load any chat - stay on home page
             } else {
                 console.error('Failed to load chats:', data.error);
-                // REMOVED: Don't create new chat automatically
             }
         } catch (error) {
             console.error('Error loading chats:', error);
@@ -113,34 +94,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function createNewChatWithMessage(message, file = null) {
-        // Create new chat when user actually sends a message
         try {
             const response = await fetch('/api/chats', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ title: 'New Chat' }) // Will be renamed automatically
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ title: 'New Chat' })
             });
 
             const data = await response.json();
 
             if (data.success) {
                 const newChat = data.chat;
-                chats.unshift(newChat); // Add to beginning
+                chats.unshift(newChat);
                 renderChatList();
 
-                // Set as current chat
                 currentChatId = newChat.id;
                 isHomePage = false;
 
-                // Update header with initial title (will change after message)
                 chatTitle.textContent = newChat.title;
-
-                // Clear welcome message
                 chatMessages.innerHTML = '';
-
-                // Update active chat in sidebar
                 updateActiveChatInSidebar(newChat.id);
 
                 return newChat.id;
@@ -159,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function loadChat(chatId) {
         try {
             setCurrentChat(chatId);
-            isHomePage = false; // We're now in a specific chat
+            isHomePage = false;
             showChatLoading();
 
             const response = await fetch(`/api/chats/${chatId}`);
@@ -167,18 +139,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (data.success) {
                 currentChatId = chatId;
-
-                // Update header
                 chatTitle.textContent = data.chat.title;
                 chatSubtitle.textContent = 'AI German Bureaucracy Assistant';
 
-                // Clear messages and load from database
                 chatMessages.innerHTML = '';
                 messageCounter = 0;
 
-                // Load messages
+                // FIXED: Pagination for large chat history
                 if (data.messages && data.messages.length > 0) {
-                    data.messages.forEach(msg => {
+                    // Only show last 50 messages
+                    const messagesToShow = data.messages.slice(-50);
+
+                    messagesToShow.forEach(msg => {
                         addMessage(msg.content,
                                  msg.role === 'user' ? 'user-message' : 'bot-message',
                                  {
@@ -187,14 +159,15 @@ document.addEventListener('DOMContentLoaded', function() {
                                      type: msg.type || 'chat'
                                  });
                     });
+
+                    if (data.messages.length > 50) {
+                        showLoadMoreIndicator(data.messages.length - 50);
+                    }
                 } else {
-                    // Show welcome message for empty chats
                     showChatWelcomeMessage();
                 }
 
-                // Update active chat in sidebar
                 updateActiveChatInSidebar(chatId);
-
                 hideChatLoading();
                 scrollToBottom();
             } else {
@@ -209,8 +182,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function showLoadMoreIndicator(count) {
+        const indicator = document.createElement('div');
+        indicator.className = 'load-more-indicator';
+        indicator.style.textAlign = 'center';
+        indicator.style.padding = '10px';
+        indicator.style.color = '#8e9aaf';
+        indicator.style.fontSize = '14px';
+        indicator.textContent = `📜 ${count} older messages not shown`;
+        chatMessages.insertBefore(indicator, chatMessages.firstChild);
+    }
+
     async function deleteChat(chatId) {
-        if (!confirm('Are you sure you want to delete this chat? This action cannot be undone.')) {
+        if (!confirm('Are you sure you want to delete this chat?')) {
             return;
         }
 
@@ -222,13 +206,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
 
             if (data.success) {
-                // Remove from local state
                 chats = chats.filter(chat => chat.id !== chatId);
                 renderChatList();
 
-                // If this was the current chat, go to home page
                 if (currentChatId === chatId) {
-                    showHomePage(); // UPDATED: Go to home page instead of creating new chat
+                    showHomePage();
                 }
 
                 showNotification('Chat deleted', 'success');
@@ -265,7 +247,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 <button class="chat-delete" title="Delete chat">×</button>
             `;
 
-            // Chat click handler
             chatItem.addEventListener('click', (e) => {
                 if (e.target.classList.contains('chat-delete')) {
                     e.stopPropagation();
@@ -289,12 +270,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateActiveChatInSidebar(chatId) {
-        // Remove active class from all chat items
         chatList.querySelectorAll('.chat-item').forEach(item => {
             item.classList.remove('active');
         });
 
-        // Add active class to current chat
         const currentChatItem = chatList.querySelector(`[data-chat-id="${chatId}"]`);
         if (currentChatItem) {
             currentChatItem.classList.add('active');
@@ -322,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ========================================================================
-    // MESSAGE HANDLING (Updated for home page behavior)
+    // MESSAGE HANDLING - FIXED
     // ========================================================================
 
     function handleInputKeypress(e) {
@@ -335,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function handleFileSelection(e) {
         if (e.target.files.length > 0) {
             const file = e.target.files[0];
-            const maxSize = 16 * 1024 * 1024; // 16MB
+            const maxSize = 16 * 1024 * 1024;
 
             if (file.size > maxSize) {
                 showNotification('File too large. Maximum size is 16MB.', 'error');
@@ -356,15 +335,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleExampleClick(e) {
         if (e.target.classList.contains('example-btn')) {
-            const exampleText = e.target.getAttribute('data-example') || e.target.textContent.replace(/[""]/g, '').replace(/^[^"]*"([^"]*)".*$/, '$1');
+            const exampleText = e.target.getAttribute('data-example') ||
+                               e.target.textContent.replace(/[""]/g, '').replace(/^[^"]*"([^"]*)".*$/, '$1');
             userInput.value = exampleText;
             userInput.focus();
-            // Auto-send example
             setTimeout(() => sendMessage(), 100);
         }
     }
 
     async function sendMessage() {
+        // FIXED: Prevent race conditions
+        if (isProcessing) {
+            console.log('Already processing a message, please wait...');
+            return;
+        }
+
         const message = userInput.value.trim();
 
         if (!message && !uploadedFile) {
@@ -372,84 +357,81 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // UPDATED: Create new chat if we're on home page
-        if (isHomePage || !currentChatId) {
-            const newChatId = await createNewChatWithMessage(message, uploadedFile);
-            if (!newChatId) {
-                showNotification('Failed to start conversation', 'error');
-                return;
-            }
-            currentChatId = newChatId;
-        }
-
-        // Disable send button during processing
+        isProcessing = true;
         sendButton.disabled = true;
 
-        // Add user message to chat if there's text
-        if (message) {
-            addMessage(message, 'user-message', {
-                timestamp: new Date().toISOString()
-            });
-        }
-
-        // Show file info if file was uploaded
-        if (uploadedFile) {
-            addMessage(`📎 **Uploaded:** ${uploadedFile.name} (${formatFileSize(uploadedFile.size)})`, 'user-message', {
-                timestamp: new Date().toISOString(),
-                isFileUpload: true
-            });
-        }
-
-        // Clear input
-        userInput.value = '';
-
-        // Show appropriate loading message
-        if (uploadedFile) {
-            showLoadingState('Processing document with OCR...');
-        } else if (message && message.toLowerCase().includes('email')) {
-            showLoadingState('Generating email...');
-        } else if (message && (message.toLowerCase().includes('translate') || message.toLowerCase().includes('übersetzen'))) {
-            showLoadingState('Translating and explaining...');
-        } else if (message && message.toLowerCase().includes('form')) {
-            showLoadingState('Analyzing form requirements...');
-        } else {
-            showLoadingState('Searching knowledge base...');
-        }
-
-        // Prepare form data
-        const formData = new FormData();
-        if (message) {
-            formData.append('message', message);
-        }
-        if (uploadedFile) {
-            formData.append('file', uploadedFile);
-        }
-        // Add current chat ID
-        formData.append('chat_id', currentChatId);
-
-        // Send to backend
         try {
+            // Create new chat if on home page
+            if (isHomePage || !currentChatId) {
+                const newChatId = await createNewChatWithMessage(message, uploadedFile);
+                if (!newChatId) {
+                    showNotification('Failed to start conversation', 'error');
+                    return;
+                }
+                currentChatId = newChatId;
+
+                // FIXED: Wait for chat creation
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            // Add user message to chat
+            if (message) {
+                addMessage(message, 'user-message', {
+                    timestamp: new Date().toISOString()
+                });
+            }
+
+            if (uploadedFile) {
+                addMessage(`📎 **Uploaded:** ${uploadedFile.name} (${formatFileSize(uploadedFile.size)})`,
+                          'user-message', {
+                    timestamp: new Date().toISOString(),
+                    isFileUpload: true
+                });
+            }
+
+            userInput.value = '';
+
+            // Show loading
+            if (uploadedFile) {
+                showLoadingState('Processing document with OCR...');
+            } else if (message && message.toLowerCase().includes('email')) {
+                showLoadingState('Generating email...');
+            } else {
+                showLoadingState('Searching knowledge base...');
+            }
+
+            // Prepare form data
+            const formData = new FormData();
+            if (message) {
+                formData.append('message', message);
+            }
+            if (uploadedFile) {
+                formData.append('file', uploadedFile);
+            }
+            formData.append('chat_id', currentChatId);
+
+            // Send to backend
             const response = await fetch('/chat', {
                 method: 'POST',
                 body: formData
             });
 
             if (!response.ok) {
-                throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                throw new Error(`Server error: ${response.status}`);
             }
 
             const data = await response.json();
             hideLoadingState();
             handleChatResponse(data);
 
-            // UPDATED: Refresh chat list and update title after first message
             await refreshCurrentChatInSidebar();
 
         } catch (error) {
             hideLoadingState();
             console.error('Chat error:', error);
-            addMessage('❌ **Connection Error:** Please check your internet connection and try again.', 'error-message');
+            addMessage('❌ **Connection Error:** Please check your internet connection.', 'error-message');
         } finally {
+            isProcessing = false;
             sendButton.disabled = false;
             resetFileInput();
             userInput.focus();
@@ -465,7 +447,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 renderChatList();
                 updateActiveChatInSidebar(currentChatId);
 
-                // UPDATED: Also update the header title with the new smart title
                 const currentChat = chats.find(chat => chat.id === currentChatId);
                 if (currentChat) {
                     chatTitle.textContent = currentChat.title;
@@ -494,21 +475,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
             addMessage(messageContent, 'bot-message', metadata);
 
-            // Show success notification for different types
-            if (data.type === 'document' || messageContent.includes('📄 **Document Analysis')) {
+            if (data.type === 'document') {
                 showNotification('Document processed successfully!', 'success');
-            } else if (messageContent.includes('📝 **Form')) {
-                showNotification('Form help provided!', 'success');
             } else if (data.sources && data.sources.length > 0) {
                 showNotification(`Found information from ${data.sources.length} source(s)`, 'success');
             }
         } else {
-            addMessage('❌ **Invalid Response:** Received invalid response from server', 'error-message');
+            addMessage('❌ **Invalid Response:** Received invalid response', 'error-message');
         }
     }
 
     function clearSession() {
-        if (!confirm('This will clear the current chat context but keep the message history. Continue?')) {
+        if (!confirm('This will clear the current chat context. Continue?')) {
             return;
         }
 
@@ -527,7 +505,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ========================================================================
-    // UI HELPERS
+    // UI HELPERS - FIXED
     // ========================================================================
 
     function addMessage(content, className, metadata = {}, isHTML = false) {
@@ -543,7 +521,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isHTML) {
             contentDiv.innerHTML = content;
         } else {
-            // Convert markdown-like formatting
             const formattedContent = formatMessageContent(content);
             contentDiv.innerHTML = formattedContent;
         }
@@ -556,15 +533,22 @@ document.addEventListener('DOMContentLoaded', function() {
         timeSpan.textContent = formatTimestamp(metadata.timestamp);
         metaDiv.appendChild(timeSpan);
 
-        // Add sources if available and valid
+        // FIXED: Better source filtering
         if (metadata.sources && Array.isArray(metadata.sources) && metadata.sources.length > 0) {
-            // Filter out empty or invalid sources, but keep actual filenames
-            const validSources = metadata.sources.filter(source => {
-                if (!source || typeof source !== 'string') return false;
-                const cleanSource = source.trim();
-                // Keep actual filenames and valid source names, filter out just "*" or empty strings
-                return cleanSource !== '' && cleanSource !== '*' && cleanSource !== 'unknown';
-            });
+            const validSources = metadata.sources
+                .filter(source => {
+                    if (!source || typeof source !== 'string') return false;
+                    const cleanSource = source.trim();
+                    // More robust filtering
+                    return cleanSource.length > 0 &&
+                           cleanSource !== '*' &&
+                           cleanSource !== 'unknown' &&
+                           cleanSource !== 'undefined' &&
+                           cleanSource !== 'null';
+                })
+                .map(s => s.trim())
+                // Remove duplicates
+                .filter((value, index, self) => self.indexOf(value) === index);
 
             if (validSources.length > 0) {
                 const sourcesSpan = document.createElement('span');
@@ -582,21 +566,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function formatMessageContent(content) {
-        // Convert basic markdown-like formatting
         let formatted = content;
-
-        // Bold text **text**
         formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-        // Line breaks
         formatted = formatted.replace(/\n/g, '<br>');
-
-        // Links (simple)
         formatted = formatted.replace(/https?:\/\/[^\s]+/g, '<a href="$&" target="_blank" rel="noopener">$&</a>');
-
-        // List items starting with •
-        formatted = formatted.replace(/^• /gm, '• ');
-
         return formatted;
     }
 
@@ -605,23 +578,20 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="message bot-message" id="welcome-message">
                 <div class="message-content">
                     <p><strong>🤖 Welcome to Amtly!</strong></p>
-                    <p>I'm your AI assistant for German bureaucracy, powered by advanced AI technologies:</p>
+                    <p>I'm your AI assistant for German bureaucracy, powered by advanced AI:</p>
                     <ul>
-                        <li>📚 <strong>RAG System:</strong> Search official documents with vector embeddings</li>
-                        <li>📄 <strong>OCR Processing:</strong> Upload PDFs or photos for text extraction</li>
-                        <li>📋 <strong>Form Intelligence:</strong> Get help with specific forms and sections</li>
-                        <li>✉️ <strong>German Emails:</strong> All emails to German offices automatically in German</li>
-                        <li>🤖 <strong>Smart Commands:</strong> I do exactly what you ask - explain, translate, or both!</li>
-                        <li>💾 <strong>Persistent Chats:</strong> Your conversations are saved and organized!</li>
+                        <li>📚 <strong>RAG System:</strong> Search official documents</li>
+                        <li>📄 <strong>OCR Processing:</strong> Upload PDFs or photos</li>
+                        <li>📋 <strong>Form Intelligence:</strong> Get help with forms</li>
+                        <li>✉️ <strong>German Emails:</strong> Automatic professional German</li>
+                        <li>💾 <strong>Persistent Chats:</strong> Your conversations are saved!</li>
                     </ul>
                     <p><strong>Try these examples:</strong></p>
                     <div class="example-prompts">
                         <button class="example-btn" data-example="Was ist Bürgergeld?">📚 "Was ist Bürgergeld?"</button>
                         <button class="example-btn" data-example="Help me with WBA form">📝 "Help me with WBA form"</button>
-                        <button class="example-btn" data-example="WBA form section B">🎯 "WBA form section B"</button>
                         <button class="example-btn" data-example="Explain this document">📄 "Explain this document"</button>
-                        <button class="example-btn" data-example="Write an email to Jobcenter about my application">✉️ "Email to Jobcenter (auto-DE)"</button>
-                        <button class="example-btn" data-example="Schreibe eine E-Mail an das Sozialamt">📧 "E-Mail an Sozialamt"</button>
+                        <button class="example-btn" data-example="Write an email to Jobcenter">✉️ "Email to Jobcenter"</button>
                     </div>
                 </div>
                 <div class="message-meta">
@@ -633,12 +603,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showChatWelcomeMessage() {
-        // Simplified welcome for existing but empty chats
         const welcomeHTML = `
             <div class="message bot-message">
                 <div class="message-content">
                     <p><strong>🤖 Ready to help!</strong></p>
-                    <p>Ask me anything about German bureaucracy, upload documents, or request form help.</p>
+                    <p>Ask me about German bureaucracy, upload documents, or request form help.</p>
                 </div>
                 <div class="message-meta">
                     <span class="message-time">Just now</span>
@@ -663,14 +632,14 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function hideChatLoading() {
-        // Chat loading will be replaced by actual messages
+        // Replaced by actual messages
     }
 
     function updateFileButton() {
         if (uploadedFile) {
             fileButton.innerHTML = `📎 <span class="button-text">${truncateFilename(uploadedFile.name)}</span>`;
             fileButton.classList.add('file-selected');
-            fileButton.title = `Selected: ${uploadedFile.name} - Click to change`;
+            fileButton.title = `Selected: ${uploadedFile.name}`;
         } else {
             fileButton.innerHTML = '📎 <span class="button-text">Upload</span>';
             fileButton.classList.remove('file-selected');
@@ -687,7 +656,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         container.appendChild(notification);
 
-        // Auto-remove after 4 seconds
         setTimeout(() => {
             if (notification.parentNode) {
                 notification.remove();

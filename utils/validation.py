@@ -1,14 +1,10 @@
 import re
-from typing import Dict, List, Optional, Union
+from typing import Dict
 from pathlib import Path
 
 
 class ValidationUtils:
-    """Utility class for input validation"""
-
-    # Common validation patterns
-    EMAIL_PATTERN = re.compile(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
-    PHONE_PATTERN = re.compile(r'^[\+]?[1-9][\d]{0,15}$')
+    """Utility class for input validation - CLEANED VERSION"""
 
     @staticmethod
     def validate_text_input(text: str, min_length: int = 1, max_length: int = 1000,
@@ -26,39 +22,6 @@ class ValidationUtils:
 
         if len(text) > max_length:
             return False, f"Text must be no more than {max_length} characters long"
-
-        return True, ""
-
-    @staticmethod
-    def validate_email(email: str) -> tuple[bool, str]:
-        """Validate email address format"""
-        if not email or not email.strip():
-            return False, "Email is required"
-
-        email = email.strip().lower()
-
-        if not ValidationUtils.EMAIL_PATTERN.match(email):
-            return False, "Please enter a valid email address"
-
-        return True, ""
-
-    @staticmethod
-    def validate_language_code(lang_code: str) -> tuple[bool, str]:
-        """Validate language code"""
-        valid_codes = ['auto', 'de', 'en', 'ar']
-
-        if not lang_code or lang_code not in valid_codes:
-            return False, f"Language must be one of: {', '.join(valid_codes)}"
-
-        return True, ""
-
-    @staticmethod
-    def validate_form_id(form_id: str) -> tuple[bool, str]:
-        """Validate form ID"""
-        valid_forms = ['HA', 'VM', 'WEP', 'KDU', 'EK']
-
-        if not form_id or form_id.upper() not in valid_forms:
-            return False, f"Form ID must be one of: {', '.join(valid_forms)}"
 
         return True, ""
 
@@ -131,45 +94,6 @@ class ValidationUtils:
         text = re.sub(r'\s+', ' ', text)
 
         return text.strip()
-
-    @staticmethod
-    def validate_query_parameters(params: Dict) -> Dict[str, Union[bool, str]]:
-        """Validate multiple query parameters"""
-        results = {}
-
-        # Validate language if present
-        if 'language' in params:
-            is_valid, error = ValidationUtils.validate_language_code(params['language'])
-            results['language'] = {'valid': is_valid, 'error': error}
-
-        # Validate message if present
-        if 'message' in params:
-            is_valid, error = ValidationUtils.validate_chat_message(params['message'])
-            results['message'] = {'valid': is_valid, 'error': error}
-
-        # Validate form_id if present
-        if 'form_id' in params:
-            is_valid, error = ValidationUtils.validate_form_id(params['form_id'])
-            results['form_id'] = {'valid': is_valid, 'error': error}
-
-        return results
-
-    @staticmethod
-    def is_safe_redirect_url(url: str, allowed_hosts: List[str] = None) -> bool:
-        """Check if URL is safe for redirects"""
-        if not url:
-            return False
-
-        # Only allow relative URLs or specific hosts
-        if url.startswith('/'):
-            return True
-
-        if allowed_hosts:
-            for host in allowed_hosts:
-                if url.startswith(f'http://{host}') or url.startswith(f'https://{host}'):
-                    return True
-
-        return False
 
 
 # Create global instance

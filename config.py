@@ -22,21 +22,14 @@ class Config:
     # App settings
     DEBUG = True
 
-    # Language settings
+    # Language settings - SIMPLIFIED
     SUPPORTED_LANGUAGES = ['en', 'de']
-    DEFAULT_LANGUAGE = os.getenv("DEFAULT_LANGUAGE", "en")  # Default to English now
-    FALLBACK_LANGUAGE = "en"
+    DEFAULT_LANGUAGE = os.getenv("DEFAULT_LANGUAGE", "en")
 
-    # Language-specific settings
+    # Language names - ONLY what we actually use
     LANGUAGE_NAMES = {
         'en': 'English',
-        'de': 'Deutsch',
-        'ar': 'العربية',
-        'fr': 'Français',
-        'es': 'Español',
-        'it': 'Italiano',
-        'tr': 'Türkçe',
-        'ru': 'Русский'
+        'de': 'Deutsch'
     }
 
     # AI settings
