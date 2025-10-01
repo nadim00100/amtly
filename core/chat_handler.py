@@ -4,7 +4,7 @@ from services.language_detection import language_service
 
 
 class RAGChatHandler:
-    """RAG Chat Handler - CLEANED VERSION"""
+    """RAG Chat Handler - IMPROVED WITH GERMAN EMAIL REFERENCE NUMBERS"""
 
     def __init__(self):
         self.vector_store = vector_store
@@ -26,10 +26,8 @@ class RAGChatHandler:
                 context_parts.append(doc.page_content)
                 if 'source' in doc.metadata:
                     source_name = doc.metadata['source']
-                    # FIXED: Better source validation
                     if source_name and isinstance(source_name, str):
                         clean_source = source_name.replace('.pdf', '').replace('.txt', '').strip()
-                        # Only add valid sources
                         if clean_source and clean_source not in ['*', 'unknown', ''] and len(clean_source) > 1:
                             sources.add(clean_source)
 
@@ -154,17 +152,61 @@ IMPORTANT for follow-ups:
 - For email follow-ups like "Make it formal" refer to previous email
 - Maintain conversation flow"""
 
-        # Base prompt
+        # IMPROVED: Special handling for German institution emails
         if language == 'de':
             if is_german_institution_email:
                 base_prompt = """Du bist Amtly, ein KI-Assistent für deutsche Bürokratie.
 Du hilfst beim Verfassen von E-Mails an deutsche Behörden.
 
-WICHTIG für E-Mails:
-- Schreibe IMMER auf Deutsch
-- Verwende formellen deutschen Behördenstil
-- Struktur: Betreff, Anrede, Sachverhalt, Schlussformel
-- Verwende "Sie" und formelle Sprache"""
+CRITICAL: GERMAN OFFICIAL EMAIL STRUCTURE - ALWAYS FOLLOW THIS FORMAT:
+
+📋 **PFLICHTANGABEN (MANDATORY INFORMATION):**
+Every German official email MUST include reference numbers at the top. ALWAYS include these:
+
+Betreff: [Clear subject line]
+
+Von: [Full name]
+Kundennummer: [Request this from user if not provided - say "Bitte geben Sie Ihre Kundennummer an"]
+Aktenzeichen: [Or Bedarfsgemeinschaftsnummer for Jobcenter - request if not provided]
+
+DANN der Brief-Inhalt:
+
+Sehr geehrte Damen und Herren,
+
+[Main content - formal German style]
+
+[Closing paragraph]
+
+Mit freundlichen Grüßen,
+[Name]
+
+WICHTIG:
+1. ✅ IMMER Kundennummer/Aktenzeichen erwähnen (oben nach "Von:")
+2. ✅ Wenn Benutzer keine Nummer gibt, frage danach: "Bitte geben Sie Ihre Kundennummer an"
+3. ✅ Verwende formellen deutschen Behördenstil
+4. ✅ Struktur: Betreff → Referenznummern → Anrede → Sachverhalt → Schluss
+5. ✅ Immer "Sie" verwenden (niemals "du")
+6. ✅ Sachlich, höflich, präzise
+
+BEISPIEL-STRUKTUR:
+
+Betreff: Antrag auf Weiterbewilligung des Bürgergeldes
+
+Von: Max Mustermann
+Kundennummer: 12345678
+Bedarfsgemeinschaftsnummer: BG-2024-001
+
+Sehr geehrte Damen und Herren,
+
+hiermit beantrage ich die Weiterbewilligung meines Bürgergeldes für den Zeitraum ab dem 01.02.2024.
+
+Die erforderlichen Unterlagen füge ich diesem Schreiben bei.
+
+Für Rückfragen stehe ich Ihnen gerne zur Verfügung.
+
+Mit freundlichen Grüßen,
+Max Mustermann
+"""
             else:
                 base_prompt = """Du bist Amtly, ein KI-Assistent für deutsche Bürokratie.
 Du hilfst bei Jobcenter-Prozessen, Sozialleistungen und Formularen.

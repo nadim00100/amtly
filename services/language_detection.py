@@ -4,7 +4,7 @@ from config import Config
 
 
 class LanguageService:
-    """Language detection service - CLEANED VERSION"""
+    """Language detection service - IMPROVED EMAIL DETECTION"""
 
     def __init__(self):
         DetectorFactory.seed = 0
@@ -63,14 +63,9 @@ class LanguageService:
         if any(phrase in text_lower for phrase in ['auf deutsch', 'in german', 'translate to german']):
             return 'de'
 
-        # German institution requests (should be German)
-        german_institutions = [
-            'jobcenter', 'arbeitsagentur', 'sozialamt', 'bürgeramt',
-            'krankenkasse', 'finanzamt', 'ausländerbehörde'
-        ]
-        if any(inst in text_lower for inst in german_institutions):
-            if any(comm in text_lower for comm in ['email', 'brief', 'schreiben', 'write']):
-                return 'de'
+        # German institution requests (should ALWAYS be German)
+        if self.is_german_institution_request(text):
+            return 'de'
 
         return None
 
@@ -113,7 +108,12 @@ class LanguageService:
         return self.default_language, 'low', 'fallback'
 
     def get_response_language(self, user_message, context=None):
-        """Get the appropriate language for AI response - SIMPLIFIED"""
+        """Get the appropriate language for AI response"""
+        # PRIORITY 1: Check for German institution emails first
+        if self.is_german_institution_request(user_message):
+            return 'de'
+
+        # PRIORITY 2: Regular language detection
         detected_lang, confidence, reason = self.detect_language(user_message, context)
 
         # For high confidence or explicit indicators, use detected language
@@ -144,28 +144,86 @@ class LanguageService:
         return self.language_names.get(lang_code, lang_code.upper())
 
     def is_german_institution_request(self, message):
-        """Check if user is requesting communication with German institutions"""
+        """
+        IMPROVED: Check if user is requesting communication with German institutions
+
+        Returns True if user wants to WRITE TO a German institution.
+        This should ALWAYS result in German language output.
+        """
         if not message:
             return False
 
         message_lower = message.lower()
 
+        # Specific German institutions (more precise, removed generic terms)
         german_institutions = [
-            'jobcenter', 'arbeitsagentur', 'agentur für arbeit', 'bundesagentur',
-            'sozialamt', 'bürgeramt', 'amt', 'behörde', 'krankenkasse', 'finanzamt',
-            'ausländerbehörde', 'einwohnermeldeamt', 'jugendamt', 'familienkasse',
-            'rentenversicherung', 'berufsgenossenschaft', 'arbeitsamt'
+            'jobcenter',
+            'arbeitsagentur', 'agentur für arbeit', 'bundesagentur',
+            'sozialamt',
+            'bürgeramt',
+            'krankenkasse',
+            'finanzamt',
+            'ausländerbehörde',
+            'einwohnermeldeamt',
+            'jugendamt',
+            'familienkasse',
+            'rentenversicherung',
+            'berufsgenossenschaft',
+            'arbeitsamt',
+            'verwaltung',  # administration
+            'rathaus',  # city hall
         ]
 
+        # Communication action words (intent to write TO them)
         communication_words = [
-            'email', 'e-mail', 'brief', 'letter', 'anschreiben', 'schreiben',
-            'nachricht', 'message', 'write', 'schreib'
+            # Email-related
+            'email', 'e-mail', 'mail',
+
+            # Letter-related
+            'brief', 'letter', 'anschreiben',
+
+            # Message-related
+            'nachricht', 'message',
+
+            # Writing actions
+            'write', 'schreib', 'schreibe', 'schreiben',
+            'send', 'sende', 'senden',
+            'compose', 'verfassen',
+
+            # Request actions
+            'contact', 'kontaktieren',
+            'reply', 'antworten',
+            'respond', 'reagieren',
         ]
 
+        # Prepositions that indicate "to" the institution
+        to_prepositions = [
+            ' to ', ' an ', ' an das ', ' an die ', ' ans ',
+            ' for ', ' für ',
+        ]
+
+        # Check 1: Has institution mentioned?
         has_institution = any(inst in message_lower for inst in german_institutions)
+
+        # Check 2: Has communication word?
         has_communication = any(comm in message_lower for comm in communication_words)
 
-        return has_institution and has_communication
+        # Check 3: Does it have "to/an" preposition indicating direction TO institution?
+        has_to_preposition = any(prep in message_lower for prep in to_prepositions)
+
+        # DECISION LOGIC:
+        # Must have BOTH institution AND communication word
+        # Having "to/an" preposition makes it more certain
+        if has_institution and has_communication:
+            # Extra validation: If it has "to/an", definitely an email request
+            if has_to_preposition:
+                return True
+
+            # Even without explicit "to", if they mention institution + write/email, it's likely a request
+            # Example: "email Jobcenter" or "schreibe Sozialamt"
+            return True
+
+        return False
 
 
 # Create global instance

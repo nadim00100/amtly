@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
+    // ========================================================================
+    // DOM ELEMENTS
+    // ========================================================================
     const userInput = document.getElementById('user-input');
     const sendButton = document.getElementById('send-button');
     const fileButton = document.getElementById('file-button');
@@ -18,15 +20,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatTitle = document.getElementById('chat-title');
     const chatSubtitle = document.getElementById('chat-subtitle');
 
-    // State
-    let uploadedFile = null;
+    // ========================================================================
+    // STATE - UPDATED FOR MULTIPLE FILES
+    // ========================================================================
+    let uploadedFiles = []; // Changed from single file to array
     let messageCounter = 0;
     let currentChatId = null;
     let chats = [];
     let isHomePage = true;
-    let isProcessing = false; // FIXED: Prevent race conditions
+    let isProcessing = false;
 
-    // Initialize
+    // ========================================================================
+    // INITIALIZATION
+    // ========================================================================
     init();
 
     function init() {
@@ -93,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    async function createNewChatWithMessage(message, file = null) {
+    async function createNewChatWithMessage(message, files = []) {
         try {
             const response = await fetch('/api/chats', {
                 method: 'POST',
@@ -145,9 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 chatMessages.innerHTML = '';
                 messageCounter = 0;
 
-                // FIXED: Pagination for large chat history
                 if (data.messages && data.messages.length > 0) {
-                    // Only show last 50 messages
                     const messagesToShow = data.messages.slice(-50);
 
                     messagesToShow.forEach(msg => {
@@ -301,7 +305,62 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ========================================================================
-    // MESSAGE HANDLING - FIXED
+    // FILE HANDLING - UPDATED FOR MULTIPLE FILES
+    // ========================================================================
+
+    function handleFileSelection(e) {
+        if (e.target.files.length > 0) {
+            const maxSize = 16 * 1024 * 1024; // 16MB per file
+            const maxFiles = 10; // Maximum 10 files
+
+            const files = Array.from(e.target.files);
+
+            // Check file count
+            if (files.length > maxFiles) {
+                showNotification(`Maximum ${maxFiles} files allowed`, 'error');
+                resetFileInput();
+                return;
+            }
+
+            // Check each file size
+            const oversizedFiles = files.filter(file => file.size > maxSize);
+            if (oversizedFiles.length > 0) {
+                showNotification(`Some files are too large. Maximum 16MB per file.`, 'error');
+                resetFileInput();
+                return;
+            }
+
+            uploadedFiles = files;
+            updateFileButton();
+        }
+    }
+
+    function resetFileInput() {
+        uploadedFiles = [];
+        fileInput.value = '';
+        updateFileButton();
+    }
+
+    function updateFileButton() {
+        if (uploadedFiles.length > 0) {
+            if (uploadedFiles.length === 1) {
+                fileButton.innerHTML = `📎 <span class="button-text">${truncateFilename(uploadedFiles[0].name)}</span>`;
+            } else {
+                fileButton.innerHTML = `📎 <span class="button-text">${uploadedFiles.length} files</span>`;
+            }
+            fileButton.classList.add('file-selected');
+
+            const fileList = uploadedFiles.map(f => f.name).join(', ');
+            fileButton.title = `Selected: ${fileList}`;
+        } else {
+            fileButton.innerHTML = '📎 <span class="button-text">Upload</span>';
+            fileButton.classList.remove('file-selected');
+            fileButton.title = 'Upload Documents (PDF/Image) - Multiple files supported';
+        }
+    }
+
+    // ========================================================================
+    // MESSAGE HANDLING - UPDATED FOR MULTIPLE FILES
     // ========================================================================
 
     function handleInputKeypress(e) {
@@ -309,28 +368,6 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             sendMessage();
         }
-    }
-
-    function handleFileSelection(e) {
-        if (e.target.files.length > 0) {
-            const file = e.target.files[0];
-            const maxSize = 16 * 1024 * 1024;
-
-            if (file.size > maxSize) {
-                showNotification('File too large. Maximum size is 16MB.', 'error');
-                resetFileInput();
-                return;
-            }
-
-            uploadedFile = file;
-            updateFileButton();
-        }
-    }
-
-    function resetFileInput() {
-        uploadedFile = null;
-        fileInput.value = '';
-        updateFileButton();
     }
 
     function handleExampleClick(e) {
@@ -344,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function sendMessage() {
-        // FIXED: Prevent race conditions
+        // Prevent race conditions
         if (isProcessing) {
             console.log('Already processing a message, please wait...');
             return;
@@ -352,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const message = userInput.value.trim();
 
-        if (!message && !uploadedFile) {
+        if (!message && uploadedFiles.length === 0) {
             userInput.focus();
             return;
         }
@@ -363,14 +400,12 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             // Create new chat if on home page
             if (isHomePage || !currentChatId) {
-                const newChatId = await createNewChatWithMessage(message, uploadedFile);
+                const newChatId = await createNewChatWithMessage(message, uploadedFiles);
                 if (!newChatId) {
                     showNotification('Failed to start conversation', 'error');
                     return;
                 }
                 currentChatId = newChatId;
-
-                // FIXED: Wait for chat creation
                 await new Promise(resolve => setTimeout(resolve, 100));
             }
 
@@ -381,33 +416,58 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
 
-            if (uploadedFile) {
-                addMessage(`📎 **Uploaded:** ${uploadedFile.name} (${formatFileSize(uploadedFile.size)})`,
-                          'user-message', {
-                    timestamp: new Date().toISOString(),
-                    isFileUpload: true
-                });
+            // Show file upload message
+            if (uploadedFiles.length > 0) {
+                const totalSize = uploadedFiles.reduce((sum, file) => sum + file.size, 0);
+
+                if (uploadedFiles.length === 1) {
+                    addMessage(
+                        `📎 **Uploaded:** ${uploadedFiles[0].name} (${formatFileSize(uploadedFiles[0].size)})`,
+                        'user-message',
+                        {
+                            timestamp: new Date().toISOString(),
+                            isFileUpload: true
+                        }
+                    );
+                } else {
+                    const fileList = uploadedFiles.map(f => `• ${f.name}`).join('\n');
+                    addMessage(
+                        `📎 **Uploaded ${uploadedFiles.length} files:**\n${fileList}\n**Total:** ${formatFileSize(totalSize)}`,
+                        'user-message',
+                        {
+                            timestamp: new Date().toISOString(),
+                            isFileUpload: true
+                        }
+                    );
+                }
             }
 
             userInput.value = '';
 
             // Show loading
-            if (uploadedFile) {
-                showLoadingState('Processing document with OCR...');
+            if (uploadedFiles.length > 0) {
+                if (uploadedFiles.length === 1) {
+                    showLoadingState('Processing document with OCR...');
+                } else {
+                    showLoadingState(`Processing ${uploadedFiles.length} documents with OCR...`);
+                }
             } else if (message && message.toLowerCase().includes('email')) {
                 showLoadingState('Generating email...');
             } else {
                 showLoadingState('Searching knowledge base...');
             }
 
-            // Prepare form data
+            // Prepare form data - MULTIPLE FILES
             const formData = new FormData();
             if (message) {
                 formData.append('message', message);
             }
-            if (uploadedFile) {
-                formData.append('file', uploadedFile);
-            }
+
+            // Append all files
+            uploadedFiles.forEach((file) => {
+                formData.append('files', file); // Note: 'files' plural
+            });
+
             formData.append('chat_id', currentChatId);
 
             // Send to backend
@@ -505,7 +565,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // ========================================================================
-    // UI HELPERS - FIXED
+    // UI HELPERS
     // ========================================================================
 
     function addMessage(content, className, metadata = {}, isHTML = false) {
@@ -533,13 +593,12 @@ document.addEventListener('DOMContentLoaded', function() {
         timeSpan.textContent = formatTimestamp(metadata.timestamp);
         metaDiv.appendChild(timeSpan);
 
-        // FIXED: Better source filtering
+        // Better source filtering
         if (metadata.sources && Array.isArray(metadata.sources) && metadata.sources.length > 0) {
             const validSources = metadata.sources
                 .filter(source => {
                     if (!source || typeof source !== 'string') return false;
                     const cleanSource = source.trim();
-                    // More robust filtering
                     return cleanSource.length > 0 &&
                            cleanSource !== '*' &&
                            cleanSource !== 'unknown' &&
@@ -547,7 +606,6 @@ document.addEventListener('DOMContentLoaded', function() {
                            cleanSource !== 'null';
                 })
                 .map(s => s.trim())
-                // Remove duplicates
                 .filter((value, index, self) => self.indexOf(value) === index);
 
             if (validSources.length > 0) {
@@ -581,7 +639,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <p>I'm your AI assistant for German bureaucracy, powered by advanced AI:</p>
                     <ul>
                         <li>📚 <strong>RAG System:</strong> Search official documents</li>
-                        <li>📄 <strong>OCR Processing:</strong> Upload PDFs or photos</li>
+                        <li>📄 <strong>OCR Processing:</strong> Upload PDFs or photos (multiple files supported!)</li>
                         <li>📋 <strong>Form Intelligence:</strong> Get help with forms</li>
                         <li>✉️ <strong>German Emails:</strong> Automatic professional German</li>
                         <li>💾 <strong>Persistent Chats:</strong> Your conversations are saved!</li>
@@ -633,18 +691,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function hideChatLoading() {
         // Replaced by actual messages
-    }
-
-    function updateFileButton() {
-        if (uploadedFile) {
-            fileButton.innerHTML = `📎 <span class="button-text">${truncateFilename(uploadedFile.name)}</span>`;
-            fileButton.classList.add('file-selected');
-            fileButton.title = `Selected: ${uploadedFile.name}`;
-        } else {
-            fileButton.innerHTML = '📎 <span class="button-text">Upload</span>';
-            fileButton.classList.remove('file-selected');
-            fileButton.title = 'Upload Document (PDF/Image)';
-        }
     }
 
     function showNotification(message, type = 'info') {
